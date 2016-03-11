@@ -23,28 +23,32 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
 
 #define SEQ(str) \
     do { \
-        assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN); \
+        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
+            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
         return TEX_SEQUENCE; \
     } while (0)
 
 #define SEQ_T1(str) \
     do { \
-        assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN); \
+        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
+            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
         return TEX_SEQUENCE_T1; \
     } while (0)
 
 #define SEQ_TC(str) \
     do { \
-        assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN); \
+        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
+            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
         return TEX_SEQUENCE_TEXTCOMP; \
     } while (0)
 
 #define ACC(str) \
     do { \
-        assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN); \
+        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
+            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
         return TEX_MODIFIER; \
     } while (0)
