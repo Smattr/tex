@@ -75,9 +75,9 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'_':                 SEQ("{\\letterunderscore}");
         case L'`':                 SEQ("{\\`}");
         case L'a' ... L'z':        return TEX_ASCII;
-        case L'{':                 SEQ("{\\letteropenbrace}");
+        case L'{':                 SEQ("{\\{}");
         case L'|':                 return TEX_ASCII;
-        case L'}':                 SEQ("{\\letterclosebrace}");
+        case L'}':                 SEQ("{\\}}");
         case L'~':                 SEQ("{\\lettertilde}");
         case 0x007f ... 0x009f:    return TEX_INVALID;
         case 0x00a0:               SEQ("~"); /* non-breaking space */
