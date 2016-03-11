@@ -176,6 +176,8 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ý':                 SEQ("{\\'y}");
         case L'þ':                 SEQ_T1("{\\th}");
         case L'ÿ':                 SEQ("{\\\"y}");
+
+        /* Latin Extended-A */
         case L'Ā':                 SEQ("{\\=A}");
         case L'ā':                 SEQ("{\\=a}");
         case L'Ă':                 SEQ("{\\u A}");
@@ -192,7 +194,55 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'č':                 SEQ("{\\v c}");
         case L'Ď':                 SEQ("{\\v D}");
         case L'ď':                 SEQ("{\\v d}");
-
+        case L'Đ':                 SEQ_T1("{\\DJ}");
+        case L'đ':                 SEQ_T1("{\\dj}");
+        case L'Ē':                 SEQ("{\\=E}");
+        case L'ē':                 SEQ("{\\=e}");
+        case L'Ĕ':                 SEQ("{\\u E}");
+        case L'ĕ':                 SEQ("{\\u e}");
+        case L'Ė':                 SEQ("{\\.E}");
+        case L'ė':                 SEQ("{\\.e}");
+        case L'Ę':                 SEQ("{\\k E}");
+        case L'ę':                 SEQ("{\\k e}");
+        case L'Ě':                 SEQ("{\\v E}");
+        case L'ě':                 SEQ("{\\v e}");
+        case L'Ĝ':                 SEQ("{\\^G}");
+        case L'ĝ':                 SEQ("{\\^g}");
+        case L'Ğ':                 SEQ("{\\u G}");
+        case L'ğ':                 SEQ("{\\u g}");
+        case L'Ġ':                 SEQ("{\\.G}");
+        case L'ġ':                 SEQ("{\\.g}");
+        case L'Ģ':                 SEQ("{\\c G}");
+        case L'ģ':                 SEQ("{\\c g}");
+        case L'Ĥ':                 SEQ("{\\^H}");
+        case L'ĥ':                 SEQ("{\\^h}");
+        case L'Ħ':                 return TEX_UNSUPPORTED; /* XXX: we could do this with T3 */
+        case L'ħ':                 return TEX_UNSUPPORTED;
+        case L'Ĩ':                 SEQ("{\\~I}");
+        case L'ĩ':                 SEQ("{\\~\\i}");
+        case L'Ī':                 SEQ("{\\=I}");
+        case L'ī':                 SEQ("{\\=\\i}");
+        case L'Ĭ':                 SEQ("{\\u I}");
+        case L'ĭ':                 SEQ("{\\u\\i}");
+        case L'Į':                 SEQ("{\\k I}");
+        case L'į':                 SEQ("{\\k i}");
+        case L'İ':                 SEQ("{\\.I}");
+        case L'ı':                 SEQ("{\\i}");
+        case L'Ĳ':                 SEQ("IJ"); /* no native ligatures it seems */
+        case L'ĳ':                 SEQ("ij");
+        case L'Ĵ':                 SEQ("{\\^J}");
+        case L'ĵ':                 SEQ("{\\^\\j}");
+        case L'Ķ':                 SEQ("{\\c K}");
+        case L'ķ':                 SEQ("{\\c k}");
+        case L'ĸ':                 return TEX_UNSUPPORTED;
+        case L'Ĺ':                 SEQ("{\\'L}");
+        case L'ĺ':                 SEQ("{\\'l}");
+        case L'Ļ':                 SEQ("{\\c L}");
+        case L'ļ':                 SEQ("{\\c l}");
+        case L'Ľ':                 SEQ("{\\v L}");
+        case L'ľ':                 SEQ("{\\v l}");
+        case L'Ŀ':                 return TEX_UNSUPPORTED;
+        case L'ŀ':                 return TEX_UNSUPPORTED;
         case L'Ł':                 SEQ("{\\L}");
         case L'ł':                 SEQ("{\\l}");
 
