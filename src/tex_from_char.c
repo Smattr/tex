@@ -609,8 +609,8 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ỻ' ... L'ỿ':        return TEX_UNSUPPORTED;
 
         /* Letterlike symbols */
-        case L'℃':                 SEQ_TC("{\\textdegree}C")
-        case L'℉':                 SEQ_TC("{\\textdegree}F")
+        case L'℃':                 SEQ_TC("{\\textdegree}C");
+        case L'℉':                 SEQ_TC("{\\textdegree}F");
         case L'™':                 SEQ("{\\texttrademark}");
 
         /* General punctuation */
