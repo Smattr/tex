@@ -4,6 +4,18 @@
 #include <string.h>
 #include "tex/tex.h"
 
+/* The translation from UTF-8 to TeX escape sequences in this file is currently
+ * quite incomplete. It has been written partially by various scripts and
+ * optimised in some places to provide a shorter character sequence. If you
+ * find a mistake or need something that isn't here, please let me know.
+ * 
+ * Note that it also makes some compromises, like outputting all Greek
+ * characters in math mode because this can be done without including any extra
+ * fonts. This is probably not ideal if you are writing a document entirely in
+ * these characters. Please let me know if this bothers you and you have a
+ * better suggestion for how to handle these.
+ */
+
 tex_char_t tex_from_char(char *s, uint32_t c) {
     assert(s != NULL);
 
