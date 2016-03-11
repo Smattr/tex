@@ -149,7 +149,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'â':                 SEQ("{\\^a}");
         case L'ã':                 SEQ("{\\~a}");
         case L'ä':                 SEQ("{\\\"a}");
-        case L'å':                 SEQ("{\\o a}");
+        case L'å':                 SEQ("{\\aa}");
         case L'æ':                 SEQ("{\\ae}");
         case L'ç':                 SEQ("{\\c c}");
         case L'è':                 SEQ("{\\`e}");
@@ -216,7 +216,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case 0x0307:               ACC("{\\.");
         case 0x0308:               ACC("{\\\"");
         case 0x0309:               return TEX_UNSUPPORTED;
-        case 0x030a:               ACC("{\\o ");
+        case 0x030a:               ACC("{\\r ");
         case 0x030b:               ACC("{\\H ");
         case 0x030c:               ACC("{\\v ");
         /* XXX */
