@@ -321,6 +321,55 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ǎ':                 SEQ("{\\v A}");
         case L'ǎ':                 SEQ("{\\v a}");
         case L'Ǐ':                 SEQ("{\\v I}");
+        case L'ǐ':                 SEQ("{\\v\\i}");
+        case L'Ǒ':                 SEQ("{\\v O}");
+        case L'ǒ':                 SEQ("{\\v o}");
+        case L'Ǔ':                 SEQ("{\\v U}");
+        case L'ǔ':                 SEQ("{\\v u}");
+        case L'Ǖ' ... L'ǡ':        return TEX_UNSUPPORTED;
+        case L'Ǣ':                 SEQ("{\\=\\AE}");
+        case L'ǣ':                 SEQ("{\\=\\ae}");
+        case L'Ǥ':
+        case L'ǥ':                 return TEX_UNSUPPORTED;
+        case L'Ǧ':                 SEQ("{\\v G}");
+        case L'ǧ':                 SEQ("{\\v g}");
+        case L'Ǩ':                 SEQ("{\\v K}");
+        case L'ǩ':                 SEQ("{\\v k}");
+        case L'Ǫ':                 SEQ("{\\k O}");
+        case L'ǫ':                 SEQ("{\\k o}");
+        case L'Ǭ' ... L'ǯ':        return TEX_UNSUPPORTED;
+        case L'ǰ':                 SEQ("{\\v\\j}");
+        case L'Ǳ':                 SEQ("DZ");
+        case L'ǲ':                 SEQ("Dz");
+        case L'ǳ':                 SEQ("dz");
+        case L'Ǵ':                 SEQ("{\\'G}");
+        case L'ǵ':                 SEQ("{\\'g}");
+        case L'Ƕ':
+        case L'Ƿ':                 return TEX_UNSUPPORTED;
+        case L'Ǹ':                 SEQ("{\\`N}");
+        case L'ǹ':                 SEQ("{\\`n}");
+        case L'Ǻ':
+        case L'ǻ':                 return TEX_UNSUPPORTED;
+        case L'Ǽ':                 SEQ("{\\'\\AE}");
+        case L'ǽ':                 SEQ("{\\'\\ae}");
+        case L'Ǿ':                 SEQ("{\\'\\O}");
+        case L'ǿ':                 SEQ("{\\'\\o}");
+        case L'Ȁ' ... L'ȝ':        return TEX_UNSUPPORTED;
+        case L'Ȟ':                 SEQ("{\\v H}");
+        case L'ȟ':                 SEQ("{\\v h}");
+        case L'Ƞ' ... L'ȥ':        return TEX_UNSUPPORTED;
+        case L'Ȧ':                 SEQ("{\\.A}");
+        case L'ȧ':                 SEQ("{\\.a}");
+        case L'Ȩ':                 SEQ("{\\c E}");
+        case L'ȩ':                 SEQ("{\\c e}");
+        case L'Ȫ' ... L'ȭ':        return TEX_UNSUPPORTED;
+        case L'Ȯ':                 SEQ("{\\.O}");
+        case L'ȯ':                 SEQ("{\\.o}");
+        case L'Ȱ':
+        case L'ȱ':                 return TEX_UNSUPPORTED;
+        case L'Ȳ':                 SEQ("{\\=Y}");
+        case L'ȳ':                 SEQ("{\\=y}");
+        case L'ȴ' ... L'ɏ':        return TEX_UNSUPPORTED;
 
         case L'ˆ':                 ACC("{\\^");
         case L'ˇ':                 ACC("{\\v ");
