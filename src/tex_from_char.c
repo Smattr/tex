@@ -103,7 +103,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'´':                 SEQ("{\\' }");
         case L'µ':                 SEQ("$\\mu$");
         case L'¶':                 SEQ("{\\P}");
-        case L'·':                 SEQ("\\textperiodcentered}");
+        case L'·':                 SEQ("{\\textperiodcentered}");
         case L'¸':                 SEQ("{\\c }");
         case L'¹':                 SEQ("\\textsuperscript{1}");
         case L'º':                 SEQ("{\\textordmasculine}");
