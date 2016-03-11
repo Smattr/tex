@@ -156,10 +156,10 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'é':                 SEQ("{\\'e}");
         case L'ê':                 SEQ("{\\^e}");
         case L'ë':                 SEQ("{\\\"e}");
-        case L'ì':                 SEQ("{\\`i}");
-        case L'í':                 SEQ("{\\'i}");
-        case L'î':                 SEQ("{\\^i}");
-        case L'ï':                 SEQ("{\\\"i}");
+        case L'ì':                 SEQ("{\\`\\i}");
+        case L'í':                 SEQ("{\\'\\i}");
+        case L'î':                 SEQ("{\\^\\i}");
+        case L'ï':                 SEQ("{\\\"\\i}");
         case L'ð':                 return TEX_UNSUPPORTED;
         case L'ñ':                 SEQ("{\\~n}");
         case L'ò':                 SEQ("{\\`o}");

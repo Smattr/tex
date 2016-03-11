@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tex/tex.h"
 
 int tex_fputs(const char *s, FILE *f) {
@@ -48,7 +49,20 @@ int tex_fputs(const char *s, FILE *f) {
             case TEX_MODIFIER:
                 if (lookahead == 0)
                     return EOF;
-                if (fprintf(f, "%s%c}", t, (char)lookahead) < 0)
+
+                /* Work around older versions of LaTeX that do not know to drop
+                 * overhead dot on an 'i' or 'j' when inserting an accent.
+                 */
+                const char *prefix = "";
+                if ((lookahead == 'i' || lookahead == 'j') &&
+                    strncmp(t, "{\\", sizeof("{\\") - 1) == 0 &&
+                    (t[2] == '"' || t[2] == '\'' || t[2] == '.' ||
+                     t[2] == '=' || t[2] == '^' || t[2] == '`' ||
+                     t[2] == '~' || t[2] == 'H' || t[2] == 'r' ||
+                     t[2] == 't' || t[2] == 'u' || t[2] == 'v'))
+                    prefix = "\\";
+
+                if (fprintf(f, "%s%s%c}", t, prefix, (char)lookahead) < 0)
                     return EOF;
                 lookahead = 0;
                 break;
