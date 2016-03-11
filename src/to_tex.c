@@ -32,13 +32,15 @@ int main(int argc, char **argv) {
 
     char *line = NULL;
     size_t n;
+    unsigned int lineno = 1;
     while (getline(&line, &n, in) != -1) {
         if (tex_fputs(line, out) == EOF) {
-            fprintf(stderr, "failed to write line to output\n");
+            fprintf(stderr, "failed to write line %u to output\n", lineno);
             fclose(out);
             fclose(in);
             return -1;
         }
+        lineno++;
     }
 
     if (errno != 0) {
