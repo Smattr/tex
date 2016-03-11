@@ -307,6 +307,21 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ž':                 SEQ("{\\v z}");
         case L'ſ':                 return TEX_UNSUPPORTED;
 
+        /* Latin Extended-B */
+        /* XXX */
+        case L'Ǆ':                 SEQ("D{\\v Z}");
+        case L'ǅ':                 SEQ("D{\\v z}");
+        case L'ǆ':                 SEQ("d{\\v z}");
+        case L'Ǉ':                 SEQ("LJ");
+        case L'ǈ':                 SEQ("Lj");
+        case L'ǉ':                 SEQ("lj");
+        case L'Ǌ':                 SEQ("NJ");
+        case L'ǋ':                 SEQ("Nj");
+        case L'ǌ':                 SEQ("nj");
+        case L'Ǎ':                 SEQ("{\\v A}");
+        case L'ǎ':                 SEQ("{\\v a}");
+        case L'Ǐ':                 SEQ("{\\v I}");
+
         case L'ˆ':                 ACC("{\\^");
         case L'ˇ':                 ACC("{\\v ");
 
