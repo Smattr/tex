@@ -16,5 +16,5 @@ endif (CMAKE_BUILD_TYPE MATCHES Debug)
 include_directories(include)
 
 add_library (tex src/tex_from_char.c src/tex_from_str.c src/tex_fputs.c src/get_utf8_char.c)
-add_executable (to_tex src/to_tex.c)
-target_link_libraries (to_tex tex)
+add_executable (utf8totex src/to_tex.c)
+target_link_libraries (utf8totex tex)
