@@ -53,6 +53,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         return TEX_MODIFIER; \
     } while (0)
 
+        /* Basic Latin */
         case 0x0000 ... 0x0008:    return TEX_INVALID;
         case L'\t':                return TEX_ASCII;
         case L'\n':                return TEX_ASCII;
@@ -79,7 +80,10 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'|':                 return TEX_ASCII;
         case L'}':                 SEQ("{\\}}");
         case L'~':                 SEQ("{\\lettertilde}");
-        case 0x007f ... 0x009f:    return TEX_INVALID;
+        case 0x007f:               return TEX_INVALID;
+
+        /* Latin-1 supplement */
+        case 0x0080 ... 0x009f:    return TEX_INVALID;
         case 0x00a0:               SEQ("~"); /* non-breaking space */
         case L'¡':                 SEQ("{\\textexclamdown}");
         case L'¢':                 SEQ("{\\textcent}");
@@ -464,6 +468,61 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ψ':                 SEQ("$\\psi$");
         case L'ω':                 SEQ("$\\omega$");
 
+        /* Phonetic extensions */
+        case L'ᴬ':                 SEQ("\\textsuperscript{A}");
+        case L'ᴭ':                 SEQ("\\textsuperscript{\\AE}");
+        case L'ᴮ':                 SEQ("\\textsuperscript{B}");
+        case L'ᴰ':                 SEQ("\\textsuperscript{D}");
+        case L'ᴱ':                 SEQ("\\textsuperscript{E}");
+        case L'ᴳ':                 SEQ("\\textsuperscript{G}");
+        case L'ᴴ':                 SEQ("\\textsuperscript{H}");
+        case L'ᴵ':                 SEQ("\\textsuperscript{I}");
+        case L'ᴶ':                 SEQ("\\textsuperscript{J}");
+        case L'ᴷ':                 SEQ("\\textsuperscript{K}");
+        case L'ᴸ':                 SEQ("\\textsuperscript{L}");
+        case L'ᴹ':                 SEQ("\\textsuperscript{M}");
+        case L'ᴺ':                 SEQ("\\textsuperscript{N}");
+        case L'ᴼ':                 SEQ("\\textsuperscript{O}");
+        case L'ᴾ':                 SEQ("\\textsuperscript{P}");
+        case L'ᴿ':                 SEQ("\\textsuperscript{R}");
+        case L'ᵀ':                 SEQ("\\textsuperscript{T}");
+        case L'ᵁ':                 SEQ("\\textsuperscript{U}");
+        case L'ᵂ':                 SEQ("\\textsuperscript{W}");
+        case L'ᵃ':                 SEQ("\\textsuperscript{a}");
+        case L'ᵇ':                 SEQ("\\textsuperscript{b}");
+        case L'ᵈ':                 SEQ("\\textsuperscript{d}");
+        case L'ᵉ':                 SEQ("\\textsuperscript{e}");
+        case L'ᵍ':                 SEQ("\\textsuperscript{g}");
+        case L'ᵏ':                 SEQ("\\textsuperscript{k}");
+        case L'ᵐ':                 SEQ("\\textsuperscript{m}");
+        case L'ᵒ':                 SEQ("\\textsuperscript{o}");
+        case L'ᵖ':                 SEQ("\\textsuperscript{p}");
+        case L'ᵗ':                 SEQ("\\textsuperscript{t}");
+        case L'ᵘ':                 SEQ("\\textsuperscript{u}");
+        case L'ᵛ':                 SEQ("\\textsuperscript{v}");
+        case L'ᵝ':                 SEQ("\\textsuperscript{$\\beta$}");
+        case L'ᵞ':                 SEQ("\\textsuperscript{$\\gamma$}");
+        case L'ᵟ':                 SEQ("\\textsuperscript{$\\delta$}");
+        case L'ᵠ':                 SEQ("\\textsuperscript{$\\phi$}");
+        case L'ᵡ':                 SEQ("\\textsuperscript{$\\chi$}");
+        case L'ᵢ':                 SEQ("\\textsubscript{i}");
+        case L'ᵣ':                 SEQ("\\textsubscript{r}");
+        case L'ᵤ':                 SEQ("\\textsubscript{u}");
+        case L'ᵥ':                 SEQ("\\textsubscript{v}");
+        case L'ᵦ':                 SEQ("\\textsubscript{$\\beta$}");
+        case L'ᵧ':                 SEQ("\\textsubscript{$\\gamma$}");
+        case L'ᵨ':                 SEQ("\\textsubscript{$\\rho$}");
+        case L'ᵩ':                 SEQ("\\textsubscript{$\\phi$}");
+        case L'ᵪ':                 SEQ("\\textsubscript{$\\chi$}");
+        case L'ᶜ':                 SEQ("\\textsuperscript{c}");
+        case L'ᶠ':                 SEQ("\\textsuperscript{f}");
+        case L'ᶢ':                 SEQ("\\textsuperscript{g}");
+        case L'ᶥ':                 SEQ("\\textsuperscript{$\\iota$}");
+        case L'ᶷ':                 SEQ("\\textsuperscript{$\\upsilon$}");
+        case L'ᶻ':                 SEQ("\\textsuperscript{z}");
+        case L'ᶿ':                 SEQ("\\textsuperscript{$\\theta$}");
+
+
         /* Latin extended additional */
         case L'Ḁ':
         case L'ḁ':                 return TEX_UNSUPPORTED;
@@ -743,6 +802,105 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'⊗':                 SEQ("$\\otimes$");
         case L'⊘':                 SEQ("$\\oslash$");
         case L'⊙':                 SEQ("$\\odot$");
+
+        /* CJK compatibility */
+        case L'㍱':                SEQ("hPa");
+        case L'㍲':                SEQ("da");
+        case L'㍳':                SEQ("AU");
+        case L'㍴':                SEQ("bar");
+        case L'㍵':                SEQ("oV");
+        case L'㍶':                SEQ("pc");
+        case L'㍷':                SEQ("dm");
+        case L'㍸':                SEQ("dm\\textsuperscript{2}");
+        case L'㍹':                SEQ("dm\\textsuperscript{3}");
+        case L'㍺':                SEQ("IU");
+        case L'㎀':                SEQ("pA");
+        case L'㎁':                SEQ("nA");
+        case L'㎂':                SEQ("$\\mu$A");
+        case L'㎃':                SEQ("mA");
+        case L'㎄':                SEQ("kA");
+        case L'㎅':                SEQ("KB");
+        case L'㎆':                SEQ("MB");
+        case L'㎇':                SEQ("GB");
+        case L'㎈':                SEQ("cal");
+        case L'㎉':                SEQ("kcal");
+        case L'㎊':                SEQ("pF");
+        case L'㎋':                SEQ("nF");
+        case L'㎌':                SEQ("$\\mu$F");
+        case L'㎍':                SEQ("$\\mu$g");
+        case L'㎎':                SEQ("mg");
+        case L'㎏':                SEQ("kg");
+        case L'㎐':                SEQ("Hz");
+        case L'㎑':                SEQ("kHz");
+        case L'㎒':                SEQ("MHz");
+        case L'㎓':                SEQ("GHz");
+        case L'㎔':                SEQ("THz");
+        case L'㎙':                SEQ("fm");
+        case L'㎚':                SEQ("nm");
+        case L'㎛':                SEQ("$\\mu$m");
+        case L'㎜':                SEQ("mm");
+        case L'㎝':                SEQ("cm");
+        case L'㎞':                SEQ("km");
+        case L'㎟':                SEQ("mm\\textsuperscript{2}");
+        case L'㎠':                SEQ("cm\\textsuperscript{2}");
+        case L'㎡':                SEQ("m\\textsuperscript{2}");
+        case L'㎢':                SEQ("km\\textsuperscript{2}");
+        case L'㎣':                SEQ("mm\\textsuperscript{3}");
+        case L'㎤':                SEQ("cm\\textsuperscript{3}");
+        case L'㎥':                SEQ("m\\textsuperscript{3}");
+        case L'㎦':                SEQ("km\\textsuperscript{3}");
+        case L'㎩':                SEQ("Pa");
+        case L'㎪':                SEQ("kPa");
+        case L'㎫':                SEQ("MPa");
+        case L'㎬':                SEQ("GPa");
+        case L'㎭':                SEQ("rad");
+        case L'㎮':                SEQ("rad/s");
+        case L'㎯':                SEQ("rad/s\\textsuperscript{2}");
+        case L'㎰':                SEQ("ps");
+        case L'㎱':                SEQ("ns");
+        case L'㎲':                SEQ("$\\mu$s");
+        case L'㎳':                SEQ("ms");
+        case L'㎴':                SEQ("pV");
+        case L'㎵':                SEQ("nV");
+        case L'㎶':                SEQ("$\\mu$V");
+        case L'㎷':                SEQ("mV");
+        case L'㎸':                SEQ("kV");
+        case L'㎹':                SEQ("MV");
+        case L'㎺':                SEQ("pW");
+        case L'㎻':                SEQ("nW");
+        case L'㎼':                SEQ("$\\mu$W");
+        case L'㎽':                SEQ("mW");
+        case L'㎾':                SEQ("kW");
+        case L'㎿':                SEQ("MW");
+        case L'㏀':                SEQ("k$\\Omega$");
+        case L'㏁':                SEQ("M$\\Omega$");
+        case L'㏂':                SEQ("a.m.");
+        case L'㏃':                SEQ("Bq");
+        case L'㏄':                SEQ("cc");
+        case L'㏅':                SEQ("cd");
+        case L'㏆':                SEQ("C/kg");
+        case L'㏇':                SEQ("Co.");
+        case L'㏈':                SEQ("dB");
+        case L'㏉':                SEQ("Gy");
+        case L'㏊':                SEQ("ha");
+        case L'㏌':                SEQ("in");
+        case L'㏍':                SEQ("K.K.");
+        case L'㏎':                SEQ("KM");
+        case L'㏏':                SEQ("kt");
+        case L'㏐':                SEQ("lm");
+        case L'㏑':                SEQ("ln");
+        case L'㏒':                SEQ("log");
+        case L'㏓':                SEQ("lx");
+        case L'㏔':                SEQ("mb");
+        case L'㏕':                SEQ("mil");
+        case L'㏖':                SEQ("mol");
+        case L'㏗':                SEQ("pH");
+        case L'㏘':                SEQ("p.m.");
+        case L'㏙':                SEQ("PPM");
+        case L'㏚':                SEQ("PR");
+        case L'㏛':                SEQ("sr");
+        case L'㏜':                SEQ("Sv");
+        case L'㏝':                SEQ("Wb");
 
         /* UTF-8 characters are a maximum of 21 bits */
         case 1 << 21 ... UINT32_MAX:
