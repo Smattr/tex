@@ -402,6 +402,16 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case 0x0361:               ACC("{\\t ");
 
         /* Greek */
+        case L';':                 SEQ("$;$");
+        case L'Ϳ':                 SEQ("$J$");
+        case 0x0380 ... 0x0383:    return TEX_INVALID;
+        case L'΄' ... L'Ά':        return TEX_UNSUPPORTED;
+        case L'·':                 SEQ("$\\textperiodcentered$");
+        case L'Έ' ... L'Ί':        return TEX_UNSUPPORTED;
+        case 0x038b:               return TEX_INVALID;
+        case L'Ό':                 return TEX_UNSUPPORTED;
+        case 0x038d:               return TEX_INVALID;
+        case L'Ύ' ... L'ΐ':        return TEX_UNSUPPORTED;
         case L'Α':                 SEQ("$A$");
         case L'Β':                 SEQ("$B$");
         case L'Γ':                 SEQ("$\\Gamma$");
