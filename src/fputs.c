@@ -10,7 +10,8 @@ int utf8totex_fputs(const char *s, FILE *f) {
     assert(s != NULL);
     assert(f != NULL);
 
-    char lookahead = 0;
+    char _lookahead[2] = {0};
+    const char* lookahead = NULL;
 
     uint32_t c;
     int length;
@@ -28,33 +29,32 @@ int utf8totex_fputs(const char *s, FILE *f) {
                 return EOF;
 
             case UTF8TOTEX_ASCII:
-                if (lookahead != 0)
-                    if (fputc(lookahead, f) == EOF)
+                if (lookahead != NULL)
+                    if (fputs(lookahead, f) == EOF)
                         return EOF;
-                lookahead = c;
+                _lookahead[0] = c;
+                lookahead = _lookahead;
                 break;
 
             case UTF8TOTEX_SEQUENCE:
             case UTF8TOTEX_SEQUENCE_T1:
             case UTF8TOTEX_SEQUENCE_TEXTCOMP:
-                if (lookahead != 0) {
-                    if (fputc(lookahead, f) == EOF)
+                if (lookahead != NULL) {
+                    if (fputs(lookahead, f) == EOF)
                         return EOF;
-                    lookahead = 0;
                 }
-                if (fputs(t, f) == EOF)
-                    return EOF;
+                lookahead = t;
                 break;
 
             case UTF8TOTEX_MODIFIER:
-                if (lookahead == 0)
+                if (lookahead == NULL)
                     return EOF;
 
                 /* Work around older versions of LaTeX that do not know to drop
                  * overhead dot on an 'i' or 'j' when inserting an accent.
                  */
                 const char *prefix = "";
-                if ((lookahead == 'i' || lookahead == 'j') &&
+                if ((lookahead[0] == 'i' || lookahead[0] == 'j') &&
                     strncmp(t, "{\\", sizeof("{\\") - 1) == 0 &&
                     (t[2] == '"' || t[2] == '\'' || t[2] == '.' ||
                      t[2] == '=' || t[2] == '^' || t[2] == '`' ||
@@ -62,9 +62,9 @@ int utf8totex_fputs(const char *s, FILE *f) {
                      t[2] == 't' || t[2] == 'u' || t[2] == 'v'))
                     prefix = "\\";
 
-                if (fprintf(f, "%s%s%c}", t, prefix, (char)lookahead) < 0)
+                if (fprintf(f, "%s%s%s}", t, prefix, lookahead) < 0)
                     return EOF;
-                lookahead = 0;
+                lookahead = NULL;
                 break;
 
             case UTF8TOTEX_UNSUPPORTED:
@@ -74,8 +74,8 @@ int utf8totex_fputs(const char *s, FILE *f) {
         s += length;
     }
 
-    if (lookahead != 0)
-        if (fputc(lookahead, f) == EOF)
+    if (lookahead != NULL)
+        if (fputs(lookahead, f) == EOF)
             return EOF;
 
     return 0;
