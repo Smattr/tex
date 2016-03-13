@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tex/tex.h"
+#include "utf8totex/utf8totex.h"
 #include <wchar.h>
 
-char *tex_from_str(const char *s) {
+char *utf8totex_from_str(const char *s) {
 
     /* setup a dynamically growing buffer */
     char *buffer_p;
@@ -12,7 +12,7 @@ char *tex_from_str(const char *s) {
     if (buffer == NULL)
         return NULL;
 
-    int r = tex_fputs(s, buffer);
+    int r = utf8totex_fputs(s, buffer);
     fclose(buffer);
     if (r == EOF) {
         free(buffer_p);

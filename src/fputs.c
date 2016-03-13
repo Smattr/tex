@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tex/tex.h"
+#include "utf8totex/utf8totex.h"
 
-int tex_fputs(const char *s, FILE *f) {
+int utf8totex_fputs(const char *s, FILE *f) {
     assert(s != NULL);
     assert(f != NULL);
 
@@ -20,23 +20,23 @@ int tex_fputs(const char *s, FILE *f) {
         if (length == -1)
             return EOF;
 
-        char t[TEX_MAX_SEQUENCE_LEN];
-        tex_char_t type = tex_from_char(t, c);
+        char t[UTF8TOTEX_MAX_SEQUENCE_LEN];
+        utf8totex_char_t type = utf8totex_from_char(t, c);
 
         switch (type) {
-            case TEX_INVALID:
+            case UTF8TOTEX_INVALID:
                 return EOF;
 
-            case TEX_ASCII:
+            case UTF8TOTEX_ASCII:
                 if (lookahead != 0)
                     if (fputc(lookahead, f) == EOF)
                         return EOF;
                 lookahead = c;
                 break;
 
-            case TEX_SEQUENCE:
-            case TEX_SEQUENCE_T1:
-            case TEX_SEQUENCE_TEXTCOMP:
+            case UTF8TOTEX_SEQUENCE:
+            case UTF8TOTEX_SEQUENCE_T1:
+            case UTF8TOTEX_SEQUENCE_TEXTCOMP:
                 if (lookahead != 0) {
                     if (fputc(lookahead, f) == EOF)
                         return EOF;
@@ -46,7 +46,7 @@ int tex_fputs(const char *s, FILE *f) {
                     return EOF;
                 break;
 
-            case TEX_MODIFIER:
+            case UTF8TOTEX_MODIFIER:
                 if (lookahead == 0)
                     return EOF;
 
@@ -67,7 +67,7 @@ int tex_fputs(const char *s, FILE *f) {
                 lookahead = 0;
                 break;
 
-            case TEX_UNSUPPORTED:
+            case UTF8TOTEX_UNSUPPORTED:
                 return EOF;
         }
 

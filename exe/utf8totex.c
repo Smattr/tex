@@ -2,7 +2,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "tex/tex.h"
+#include "utf8totex/utf8totex.h"
 
 int main(int argc, char **argv) {
 
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     size_t n;
     unsigned int lineno = 1;
     while (getline(&line, &n, in) != -1) {
-        if (tex_fputs(line, out) == EOF) {
+        if (utf8totex_fputs(line, out) == EOF) {
             fprintf(stderr, "failed to write line %u to output\n", lineno);
             fclose(out);
             fclose(in);

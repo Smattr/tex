@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include "tex/tex.h"
+#include "utf8totex/utf8totex.h"
 
 /* The translation from UTF-8 to TeX escape sequences in this file is currently
  * quite incomplete. It has been written partially by various scripts and
@@ -16,74 +16,74 @@
  * better suggestion for how to handle these.
  */
 
-tex_char_t tex_from_char(char *s, uint32_t c) {
+utf8totex_char_t utf8totex_from_char(char *s, uint32_t c) {
     assert(s != NULL);
 
     switch (c) {
 
 #define SEQ(str) \
     do { \
-        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
-            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
+        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
+            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
-        return TEX_SEQUENCE; \
+        return UTF8TOTEX_SEQUENCE; \
     } while (0)
 
 #define SEQ_T1(str) \
     do { \
-        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
-            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
+        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
+            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
-        return TEX_SEQUENCE_T1; \
+        return UTF8TOTEX_SEQUENCE_T1; \
     } while (0)
 
 #define SEQ_TC(str) \
     do { \
-        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
-            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
+        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
+            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
-        return TEX_SEQUENCE_TEXTCOMP; \
+        return UTF8TOTEX_SEQUENCE_TEXTCOMP; \
     } while (0)
 
 #define ACC(str) \
     do { \
-        static_assert(sizeof(str) <= TEX_MAX_SEQUENCE_LEN, \
-            "string exceeding TEX_MAX_SEQUENCE_LEN"); \
+        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
+            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
         strcpy(s, (str)); \
-        return TEX_MODIFIER; \
+        return UTF8TOTEX_MODIFIER; \
     } while (0)
 
         /* Basic Latin */
-        case 0x0000 ... 0x0008:    return TEX_INVALID;
-        case L'\t':                return TEX_ASCII;
-        case L'\n':                return TEX_ASCII;
-        case 0x000b ... 0x000c:    return TEX_INVALID;
-        case L'\r':                return TEX_ASCII;
-        case 0x000e ... 0x001f:    return TEX_INVALID;
-        case L' ' ... L'"':        return TEX_ASCII;
+        case 0x0000 ... 0x0008:    return UTF8TOTEX_INVALID;
+        case L'\t':                return UTF8TOTEX_ASCII;
+        case L'\n':                return UTF8TOTEX_ASCII;
+        case 0x000b ... 0x000c:    return UTF8TOTEX_INVALID;
+        case L'\r':                return UTF8TOTEX_ASCII;
+        case 0x000e ... 0x001f:    return UTF8TOTEX_INVALID;
+        case L' ' ... L'"':        return UTF8TOTEX_ASCII;
         case L'#':                 SEQ("{\\#}");
         case L'$':                 SEQ("{\\$}");
         case L'%':                 SEQ("{\\%}");
         case L'&':                 SEQ("{\\&}");
-        case L'\'' ... L';':       return TEX_ASCII;
+        case L'\'' ... L';':       return UTF8TOTEX_ASCII;
         case L'<':                 SEQ("{\\textless}");
-        case L'=':                 return TEX_ASCII;
+        case L'=':                 return UTF8TOTEX_ASCII;
         case L'>':                 SEQ("{\\textgreater}");
-        case L'?' ... L'[':        return TEX_ASCII;
+        case L'?' ... L'[':        return UTF8TOTEX_ASCII;
         case L'\\':                SEQ("{\\letterbackslash}");
-        case L']':                 return TEX_ASCII;
+        case L']':                 return UTF8TOTEX_ASCII;
         case L'^':                 SEQ("{\\letterhat}");
         case L'_':                 SEQ("{\\letterunderscore}");
         case L'`':                 SEQ("{\\`}");
-        case L'a' ... L'z':        return TEX_ASCII;
+        case L'a' ... L'z':        return UTF8TOTEX_ASCII;
         case L'{':                 SEQ("{\\{}");
-        case L'|':                 return TEX_ASCII;
+        case L'|':                 return UTF8TOTEX_ASCII;
         case L'}':                 SEQ("{\\}}");
         case L'~':                 SEQ("{\\lettertilde}");
-        case 0x007f:               return TEX_INVALID;
+        case 0x007f:               return UTF8TOTEX_INVALID;
 
         /* Latin-1 supplement */
-        case 0x0080 ... 0x009f:    return TEX_INVALID;
+        case 0x0080 ... 0x009f:    return UTF8TOTEX_INVALID;
         case 0x00a0:               SEQ("~"); /* non-breaking space */
         case L'¡':                 SEQ("{\\textexclamdown}");
         case L'¢':                 SEQ("{\\textcent}");
@@ -164,7 +164,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'í':                 SEQ("{\\'\\i}");
         case L'î':                 SEQ("{\\^\\i}");
         case L'ï':                 SEQ("{\\\"\\i}");
-        case L'ð':                 return TEX_UNSUPPORTED;
+        case L'ð':                 return UTF8TOTEX_UNSUPPORTED;
         case L'ñ':                 SEQ("{\\~n}");
         case L'ò':                 SEQ("{\\`o}");
         case L'ó':                 SEQ("{\\'o}");
@@ -220,8 +220,8 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ģ':                 SEQ("{\\c g}");
         case L'Ĥ':                 SEQ("{\\^H}");
         case L'ĥ':                 SEQ("{\\^h}");
-        case L'Ħ':                 return TEX_UNSUPPORTED; /* XXX: we could do this with T3 */
-        case L'ħ':                 return TEX_UNSUPPORTED;
+        case L'Ħ':                 return UTF8TOTEX_UNSUPPORTED; /* XXX: we could do this with T3 */
+        case L'ħ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ĩ':                 SEQ("{\\~I}");
         case L'ĩ':                 SEQ("{\\~\\i}");
         case L'Ī':                 SEQ("{\\=I}");
@@ -238,15 +238,15 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ĵ':                 SEQ("{\\^\\j}");
         case L'Ķ':                 SEQ("{\\c K}");
         case L'ķ':                 SEQ("{\\c k}");
-        case L'ĸ':                 return TEX_UNSUPPORTED;
+        case L'ĸ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ĺ':                 SEQ("{\\'L}");
         case L'ĺ':                 SEQ("{\\'l}");
         case L'Ļ':                 SEQ("{\\c L}");
         case L'ļ':                 SEQ("{\\c l}");
         case L'Ľ':                 SEQ("{\\v L}");
         case L'ľ':                 SEQ("{\\v l}");
-        case L'Ŀ':                 return TEX_UNSUPPORTED;
-        case L'ŀ':                 return TEX_UNSUPPORTED;
+        case L'Ŀ':                 return UTF8TOTEX_UNSUPPORTED;
+        case L'ŀ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ł':                 SEQ("{\\L}");
         case L'ł':                 SEQ("{\\l}");
         case L'Ń':                 SEQ("{\\'N}");
@@ -255,7 +255,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ņ':                 SEQ("{\\c n}");
         case L'Ň':                 SEQ("{\\v N}");
         case L'ň':                 SEQ("{\\v n}");
-        case L'ŉ':                 return TEX_UNSUPPORTED;
+        case L'ŉ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ŋ':                 SEQ_T1("{\\NG}");
         case L'ŋ':                 SEQ_T1("{\\ng}");
         case L'Ō':                 SEQ("{\\=O}");
@@ -284,8 +284,8 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ţ':                 SEQ("{\\c t}");
         case L'Ť':                 SEQ("{\\v T}");
         case L'ť':                 SEQ("{\\v t}");
-        case L'Ŧ':                 return TEX_UNSUPPORTED;
-        case L'ŧ':                 return TEX_UNSUPPORTED;
+        case L'Ŧ':                 return UTF8TOTEX_UNSUPPORTED;
+        case L'ŧ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ũ':                 SEQ("{\\~U}");
         case L'ũ':                 SEQ("{\\~u}");
         case L'Ū':                 SEQ("{\\=U}");
@@ -309,7 +309,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ż':                 SEQ("{\\.z}");
         case L'Ž':                 SEQ("{\\v Z}");
         case L'ž':                 SEQ("{\\v z}");
-        case L'ſ':                 return TEX_UNSUPPORTED;
+        case L'ſ':                 return UTF8TOTEX_UNSUPPORTED;
 
         /* Latin Extended-B */
         /* XXX */
@@ -330,18 +330,18 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ǒ':                 SEQ("{\\v o}");
         case L'Ǔ':                 SEQ("{\\v U}");
         case L'ǔ':                 SEQ("{\\v u}");
-        case L'Ǖ' ... L'ǡ':        return TEX_UNSUPPORTED;
+        case L'Ǖ' ... L'ǡ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ǣ':                 SEQ("{\\=\\AE}");
         case L'ǣ':                 SEQ("{\\=\\ae}");
         case L'Ǥ':
-        case L'ǥ':                 return TEX_UNSUPPORTED;
+        case L'ǥ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ǧ':                 SEQ("{\\v G}");
         case L'ǧ':                 SEQ("{\\v g}");
         case L'Ǩ':                 SEQ("{\\v K}");
         case L'ǩ':                 SEQ("{\\v k}");
         case L'Ǫ':                 SEQ("{\\k O}");
         case L'ǫ':                 SEQ("{\\k o}");
-        case L'Ǭ' ... L'ǯ':        return TEX_UNSUPPORTED;
+        case L'Ǭ' ... L'ǯ':        return UTF8TOTEX_UNSUPPORTED;
         case L'ǰ':                 SEQ("{\\v\\j}");
         case L'Ǳ':                 SEQ("DZ");
         case L'ǲ':                 SEQ("Dz");
@@ -349,31 +349,31 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ǵ':                 SEQ("{\\'G}");
         case L'ǵ':                 SEQ("{\\'g}");
         case L'Ƕ':
-        case L'Ƿ':                 return TEX_UNSUPPORTED;
+        case L'Ƿ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ǹ':                 SEQ("{\\`N}");
         case L'ǹ':                 SEQ("{\\`n}");
         case L'Ǻ':
-        case L'ǻ':                 return TEX_UNSUPPORTED;
+        case L'ǻ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ǽ':                 SEQ("{\\'\\AE}");
         case L'ǽ':                 SEQ("{\\'\\ae}");
         case L'Ǿ':                 SEQ("{\\'\\O}");
         case L'ǿ':                 SEQ("{\\'\\o}");
-        case L'Ȁ' ... L'ȝ':        return TEX_UNSUPPORTED;
+        case L'Ȁ' ... L'ȝ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ȟ':                 SEQ("{\\v H}");
         case L'ȟ':                 SEQ("{\\v h}");
-        case L'Ƞ' ... L'ȥ':        return TEX_UNSUPPORTED;
+        case L'Ƞ' ... L'ȥ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ȧ':                 SEQ("{\\.A}");
         case L'ȧ':                 SEQ("{\\.a}");
         case L'Ȩ':                 SEQ("{\\c E}");
         case L'ȩ':                 SEQ("{\\c e}");
-        case L'Ȫ' ... L'ȭ':        return TEX_UNSUPPORTED;
+        case L'Ȫ' ... L'ȭ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ȯ':                 SEQ("{\\.O}");
         case L'ȯ':                 SEQ("{\\.o}");
         case L'Ȱ':
-        case L'ȱ':                 return TEX_UNSUPPORTED;
+        case L'ȱ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ȳ':                 SEQ("{\\=Y}");
         case L'ȳ':                 SEQ("{\\=y}");
-        case L'ȴ' ... L'ɏ':        return TEX_UNSUPPORTED;
+        case L'ȴ' ... L'ɏ':        return UTF8TOTEX_UNSUPPORTED;
 
         case L'ˆ':                 ACC("{\\^");
         case L'ˇ':                 ACC("{\\v ");
@@ -390,11 +390,11 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case 0x0302:               ACC("{\\^");
         case 0x0303:               ACC("{\\~");
         case 0x0304:               ACC("{\\=");
-        case 0x0305:               return TEX_UNSUPPORTED;
+        case 0x0305:               return UTF8TOTEX_UNSUPPORTED;
         case 0x0306:               ACC("{\\u ");
         case 0x0307:               ACC("{\\.");
         case 0x0308:               ACC("{\\\"");
-        case 0x0309:               return TEX_UNSUPPORTED;
+        case 0x0309:               return UTF8TOTEX_UNSUPPORTED;
         case 0x030a:               ACC("{\\r ");
         case 0x030b:               ACC("{\\H ");
         case 0x030c:               ACC("{\\v ");
@@ -408,14 +408,14 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         /* Greek */
         case L';':                 SEQ("$;$");
         case L'Ϳ':                 SEQ("$J$");
-        case 0x0380 ... 0x0383:    return TEX_INVALID;
-        case L'΄' ... L'Ά':        return TEX_UNSUPPORTED;
+        case 0x0380 ... 0x0383:    return UTF8TOTEX_INVALID;
+        case L'΄' ... L'Ά':        return UTF8TOTEX_UNSUPPORTED;
         case L'·':                 SEQ("$\\textperiodcentered$");
-        case L'Έ' ... L'Ί':        return TEX_UNSUPPORTED;
-        case 0x038b:               return TEX_INVALID;
-        case L'Ό':                 return TEX_UNSUPPORTED;
-        case 0x038d:               return TEX_INVALID;
-        case L'Ύ' ... L'ΐ':        return TEX_UNSUPPORTED;
+        case L'Έ' ... L'Ί':        return UTF8TOTEX_UNSUPPORTED;
+        case 0x038b:               return UTF8TOTEX_INVALID;
+        case L'Ό':                 return UTF8TOTEX_UNSUPPORTED;
+        case 0x038d:               return UTF8TOTEX_INVALID;
+        case L'Ύ' ... L'ΐ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Α':                 SEQ("$A$");
         case L'Β':                 SEQ("$B$");
         case L'Γ':                 SEQ("$\\Gamma$");
@@ -433,7 +433,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ο':                 SEQ("$O$");
         case L'Π':                 SEQ("$\\Pi$");
         case L'Ρ':                 SEQ("$P$");
-        case 0x03a2:               return TEX_INVALID;
+        case 0x03a2:               return UTF8TOTEX_INVALID;
         case L'Σ':                 SEQ("$\\Sigma$");
         case L'Τ':                 SEQ("$T$");
         case L'Υ':                 SEQ("$Y$");
@@ -525,7 +525,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
 
         /* Latin extended additional */
         case L'Ḁ':
-        case L'ḁ':                 return TEX_UNSUPPORTED;
+        case L'ḁ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ḃ':                 SEQ("{\\.B}");
         case L'ḃ':                 SEQ("{\\.b}");
         case L'Ḅ':                 SEQ("{\\d B}");
@@ -533,7 +533,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ḇ':                 SEQ("{\\b B}");
         case L'ḇ':                 SEQ("{\\b b}");
         case L'Ḉ':
-        case L'ḉ':                 return TEX_UNSUPPORTED;
+        case L'ḉ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ḋ':                 SEQ("{\\.D}");
         case L'ḋ':                 SEQ("{\\.d}");
         case L'Ḍ':                 SEQ("{\\d D}");
@@ -542,7 +542,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ḏ':                 SEQ("{\\b d}");
         case L'Ḑ':                 SEQ("{\\c D}");
         case L'ḑ':                 SEQ("{\\c d}");
-        case L'Ḓ' ... L'ḝ':        return TEX_UNSUPPORTED;
+        case L'Ḓ' ... L'ḝ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ḟ':                 SEQ("{\\.F}");
         case L'ḟ':                 SEQ("{\\.f}");
         case L'Ḡ':                 SEQ("{\\=G}");
@@ -555,7 +555,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ḧ':                 SEQ("{\\\"h}");
         case L'Ḩ':                 SEQ("{\\c H}");
         case L'ḩ':                 SEQ("{\\c h}");
-        case L'Ḫ' ... L'ḯ':        return TEX_UNSUPPORTED;
+        case L'Ḫ' ... L'ḯ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ḱ':                 SEQ("{\\'K}");
         case L'ḱ':                 SEQ("{\\'k}");
         case L'Ḳ':                 SEQ("{\\d K}");
@@ -565,11 +565,11 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ḷ':                 SEQ("{\\d L}");
         case L'ḷ':                 SEQ("{\\d l}");
         case L'Ḹ':
-        case L'ḹ':                 return TEX_UNSUPPORTED;
+        case L'ḹ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ḻ':                 SEQ("{\\b L}");
         case L'ḻ':                 SEQ("{\\b l}");
         case L'Ḽ':
-        case L'ḽ':                 return TEX_UNSUPPORTED;
+        case L'ḽ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ḿ':                 SEQ("{\\'M}");
         case L'ḿ':                 SEQ("{\\'m}");
         case L'Ṁ':                 SEQ("{\\.M}");
@@ -582,7 +582,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ṇ':                 SEQ("{\\d n}");
         case L'Ṉ':                 SEQ("{\\b N}");
         case L'ṉ':                 SEQ("{\\b n}");
-        case L'Ṋ' ... L'ṓ':        return TEX_UNSUPPORTED;
+        case L'Ṋ' ... L'ṓ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ṕ':                 SEQ("{\\'P}");
         case L'ṕ':                 SEQ("{\\'p}");
         case L'Ṗ':                 SEQ("{\\.P}");
@@ -592,21 +592,21 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'Ṛ':                 SEQ("{\\d R}");
         case L'ṛ':                 SEQ("{\\d r}");
         case L'Ṝ':
-        case L'ṝ':                 return TEX_UNSUPPORTED;
+        case L'ṝ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ṟ':                 SEQ("{\\b R}");
         case L'ṟ':                 SEQ("{\\b r}");
         case L'Ṡ':                 SEQ("{\\.S}");
         case L'ṡ':                 SEQ("{\\.s}");
         case L'Ṣ':                 SEQ("{\\d S}");
         case L'ṣ':                 SEQ("{\\d s}");
-        case L'Ṥ' ... L'ṩ':        return TEX_UNSUPPORTED;
+        case L'Ṥ' ... L'ṩ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ṫ':                 SEQ("{\\.T}");
         case L'ṫ':                 SEQ("{\\.t}");
         case L'Ṭ':                 SEQ("{\\d T}");
         case L'ṭ':                 SEQ("{\\d t}");
         case L'Ṯ':                 SEQ("{\\b T}");
         case L'ṯ':                 SEQ("{\\b t}");
-        case L'Ṱ' ... L'ṻ':        return TEX_UNSUPPORTED;
+        case L'Ṱ' ... L'ṻ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ṽ':                 SEQ("{\\~V}");
         case L'ṽ':                 SEQ("{\\~v}");
         case L'Ṿ':                 SEQ("{\\d V}");
@@ -637,35 +637,35 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ẗ':                 SEQ("{\\\"t}");
         case L'ẘ':                 SEQ("{\\r w}");
         case L'ẙ':                 SEQ("{\\r y}");
-        case L'ẚ' ... L'ẞ':        return TEX_UNSUPPORTED;
+        case L'ẚ' ... L'ẞ':        return UTF8TOTEX_UNSUPPORTED;
         case L'ẟ':                 SEQ("$\\delta$");
         case L'Ạ':                 SEQ("{\\d A}");
         case L'ạ':                 SEQ("{\\d a}");
-        case L'Ả' ... L'ặ':        return TEX_UNSUPPORTED;
+        case L'Ả' ... L'ặ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ẹ':                 SEQ("{\\d E}");
         case L'ẹ':                 SEQ("{\\d e}");
         case L'Ẻ':
-        case L'ẻ':                 return TEX_UNSUPPORTED;
+        case L'ẻ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'Ẽ':                 SEQ("{\\~E}");
         case L'ẽ':                 SEQ("{\\~e}");
-        case L'Ế' ... L'ỉ':        return TEX_UNSUPPORTED;
+        case L'Ế' ... L'ỉ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ị':                 SEQ("{\\d I}");
         case L'ị':                 SEQ("{\\d i}");
         case L'Ọ':                 SEQ("{\\d O}");
         case L'ọ':                 SEQ("{\\d o}");
-        case L'Ỏ' ... L'ợ':        return TEX_UNSUPPORTED;
+        case L'Ỏ' ... L'ợ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ụ':                 SEQ("{\\d U}");
         case L'ụ':                 SEQ("{\\d u}");
-        case L'Ủ' ... L'ự':        return TEX_UNSUPPORTED;
+        case L'Ủ' ... L'ự':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ỳ':                 SEQ("{\\`Y}");
         case L'ỳ':                 SEQ("{\\`y}");
         case L'Ỵ':                 SEQ("{\\d Y}");
         case L'ỵ':                 SEQ("{\\d y}");
-        case L'Ỷ' ... L'ỷ':        return TEX_UNSUPPORTED;
+        case L'Ỷ' ... L'ỷ':        return UTF8TOTEX_UNSUPPORTED;
         case L'Ỹ':                 SEQ("{\\~Y}");
         case L'ỹ':                 SEQ("{\\~y}");
         case L'Ỻ':                 SEQ("IL");
-        case L'ỻ' ... L'ỿ':        return TEX_UNSUPPORTED;
+        case L'ỻ' ... L'ỿ':        return UTF8TOTEX_UNSUPPORTED;
 
         /* Letterlike symbols */
         case L'℃':                 SEQ_TC("{\\textdegree}C");
@@ -699,7 +699,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         /* XXX */
         case L'⁰':                 SEQ("\\textsuperscript{0}");
         case L'ⁱ':                 SEQ("\\textsuperscript{i}");
-        case 0x2072 ... 0x2073:    return TEX_INVALID;
+        case 0x2072 ... 0x2073:    return UTF8TOTEX_INVALID;
         case L'⁴':                 SEQ("\\textsuperscript{4}");
         case L'⁵':                 SEQ("\\textsuperscript{5}");
         case L'⁶':                 SEQ("\\textsuperscript{6}");
@@ -727,12 +727,12 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'₌':                 SEQ("\\textsubscript{=}");
         case L'₍':                 SEQ("\\textsubscript{(}");
         case L'₎':                 SEQ("\\textsubscript{)}");
-        case 0x208f:               return TEX_INVALID;
+        case 0x208f:               return UTF8TOTEX_INVALID;
         case L'ₐ':                 SEQ("\\textsubscript{a}");
         case L'ₑ':                 SEQ("\\textsubscript{e}");
         case L'ₒ':                 SEQ("\\textsubscript{o}");
         case L'ₓ':                 SEQ("\\textsubscript{x}");
-        case L'ₔ':                 return TEX_UNSUPPORTED;
+        case L'ₔ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'ₕ':                 SEQ("\\textsubscript{h}");
         case L'ₖ':                 SEQ("\\textsubscript{k}");
         case L'ₗ':                 SEQ("\\textsubscript{l}");
@@ -741,9 +741,9 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ₚ':                 SEQ("\\textsubscript{p}");
         case L'ₛ':                 SEQ("\\textsubscript{s}");
         case L'ₜ':                 SEQ("\\textsubscript{t}");
-        case 0x209d ... 0x209f:    return TEX_INVALID;
+        case 0x209d ... 0x209f:    return UTF8TOTEX_INVALID;
 
-        case 0x20bf ... 0x20cf:    return TEX_INVALID;
+        case 0x20bf ... 0x20cf:    return UTF8TOTEX_INVALID;
 
         /* Number forms */
         case L'Ⅰ':                 SEQ("I");
@@ -779,7 +779,7 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
         case L'ⅾ':                 SEQ("d");
         case L'ⅿ':                 SEQ("m");
 
-        case 0x218c ... 0x218f:    return TEX_INVALID;
+        case 0x218c ... 0x218f:    return UTF8TOTEX_INVALID;
 
         /* Mathematical operatos */
         case L'∆':                 SEQ("$\\bigtriangleup$");
@@ -904,10 +904,10 @@ tex_char_t tex_from_char(char *s, uint32_t c) {
 
         /* UTF-8 characters are a maximum of 21 bits */
         case 1 << 21 ... UINT32_MAX:
-            return TEX_INVALID;
+            return UTF8TOTEX_INVALID;
 
         default:
-            return TEX_UNSUPPORTED;
+            return UTF8TOTEX_UNSUPPORTED;
             
 #undef SEQ
 #undef SEQ_T1
