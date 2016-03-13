@@ -79,14 +79,10 @@ typedef enum {
  * pre-decode their string input into UTF-8 characters. See the implementation
  * of `utf8totex_fputs` for an example of this.
  *
- * @param s An output buffer to write TeX escape sequences into. This buffer
- *          must be at least `UTF8TOTEX_MAX_SEQUENCE_LEN` bytes large.
+ * @param s An output pointer to write TeX escape sequences into. This pointer
+ *          will end up pointing at a static constant string, valid for the
+ *          lifetime of the program, that should not be freed.
  * @param c The input UTF-8 character.
  * @return See the definition of `utf8totex_char_t` for how to interpret this value.
  */
-utf8totex_char_t utf8totex_from_char(char *s, uint32_t c) __attribute__((nonnull));
-
-enum {
-    UTF8TOTEX_MAX_SEQUENCE_LEN = 30, /**< The maximum length of any sequence returned
-                                    by `utf8totex_from_char`. */
-};
+utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) __attribute__((nonnull));

@@ -16,40 +16,32 @@
  * better suggestion for how to handle these.
  */
 
-utf8totex_char_t utf8totex_from_char(char *s, uint32_t c) {
+utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
     assert(s != NULL);
 
     switch (c) {
 
 #define SEQ(str) \
     do { \
-        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
-            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
-        strcpy(s, (str)); \
+        *(s) = (str); \
         return UTF8TOTEX_SEQUENCE; \
     } while (0)
 
 #define SEQ_T1(str) \
     do { \
-        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
-            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
-        strcpy(s, (str)); \
+        *(s) = (str); \
         return UTF8TOTEX_SEQUENCE_T1; \
     } while (0)
 
 #define SEQ_TC(str) \
     do { \
-        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
-            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
-        strcpy(s, (str)); \
+        *(s) = (str); \
         return UTF8TOTEX_SEQUENCE_TEXTCOMP; \
     } while (0)
 
 #define ACC(str) \
     do { \
-        static_assert(sizeof(str) <= UTF8TOTEX_MAX_SEQUENCE_LEN, \
-            "string exceeding UTF8TOTEX_MAX_SEQUENCE_LEN"); \
-        strcpy(s, (str)); \
+        *(s) = (str); \
         return UTF8TOTEX_MODIFIER; \
     } while (0)
 

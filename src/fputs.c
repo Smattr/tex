@@ -20,8 +20,8 @@ int utf8totex_fputs(const char *s, FILE *f) {
         if (length == -1)
             return EOF;
 
-        char t[UTF8TOTEX_MAX_SEQUENCE_LEN];
-        utf8totex_char_t type = utf8totex_from_char(t, c);
+        const char *t;
+        utf8totex_char_t type = utf8totex_from_char(&t, c);
 
         switch (type) {
             case UTF8TOTEX_INVALID:
