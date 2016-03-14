@@ -11,8 +11,25 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
     assert(s != NULL);
     assert(f != NULL);
 
+#define ERR(code) \
+    do { \
+        if (error != NULL) { \
+            *error = UTF8TOTEX_ ## code; \
+        } \
+        return EOF; \
+    } while (0)
+
     char _lookahead[2] = {0};
     const char* lookahead = NULL;
+#define FLUSH_LOOKAHEAD() \
+    do { \
+        if (lookahead != NULL) { \
+            if (fputs(lookahead, f) == EOF) { \
+                ERR(INVALID); \
+            } \
+            lookahead = NULL; \
+        } \
+    } while (0)
 
     unsigned brace_depth = 0;
 
@@ -21,32 +38,16 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
     while ((length = get_utf8_char(&c, s)) != 0) {
         assert(length <= 4);
 
-        if (length == -1) {
-            if (error != NULL)
-                *error = UTF8TOTEX_INVALID;
-            return EOF;
-        }
+        if (length == -1)
+            ERR(INVALID);
 
         if (bibtex) {
             if (c == L'{' || brace_depth > 0) {
-                if (length != 1) {
-                    if (error != NULL)
-                        *error = UTF8TOTEX_INVALID; /* XXX */
-                    return EOF;
-                }
-                if (lookahead != NULL) {
-                    if (fputs(lookahead, f) == EOF) {
-                        if (error != NULL)
-                            *error = UTF8TOTEX_EOF;
-                        return EOF;
-                    }
-                    lookahead = NULL;
-                }
-                if (fputc(c, f) == EOF) {
-                    if (error != NULL)
-                        *error = UTF8TOTEX_EOF;
-                    return EOF;
-                }
+                if (length != 1)
+                    ERR(INVALID); /* XXX */
+                FLUSH_LOOKAHEAD();
+                if (fputc(c, f) == EOF)
+                    ERR(EOF);
                 if (c == L'{') {
                     brace_depth++;
                 } else if (c == '}') {
@@ -63,13 +64,7 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
 
         switch (type) {
             case UTF8TOTEX_ASCII:
-                if (lookahead != NULL) {
-                    if (fputs(lookahead, f) == EOF) {
-                        if (error != NULL)
-                            *error = UTF8TOTEX_EOF;
-                        return EOF;
-                    }
-                }
+                FLUSH_LOOKAHEAD();
                 _lookahead[0] = c;
                 lookahead = _lookahead;
                 break;
@@ -77,22 +72,13 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
             case UTF8TOTEX_SEQUENCE:
             case UTF8TOTEX_SEQUENCE_T1:
             case UTF8TOTEX_SEQUENCE_TEXTCOMP:
-                if (lookahead != NULL) {
-                    if (fputs(lookahead, f) == EOF) {
-                        if (error != NULL)
-                            *error = UTF8TOTEX_EOF;
-                        return EOF;
-                    }
-                }
+                FLUSH_LOOKAHEAD();
                 lookahead = t;
                 break;
 
             case UTF8TOTEX_MODIFIER:
-                if (lookahead == NULL) {
-                    if (error != NULL)
-                        *error = UTF8TOTEX_BAD_MODIFIER;
-                    return EOF;
-                }
+                if (lookahead == NULL)
+                    ERR(BAD_MODIFIER);
 
                 /* Work around older versions of LaTeX that do not know to drop
                  * overhead dot on an 'i' or 'j' when inserting an accent.
@@ -106,12 +92,11 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
                      t[2] == 't' || t[2] == 'u' || t[2] == 'v'))
                     prefix = "\\";
 
-                if (fprintf(f, "%s%s%s}", t, prefix, lookahead) < 0) {
-                    if (error != NULL)
-                        *error = UTF8TOTEX_EOF;
-                    return EOF;
-                }
-                lookahead = NULL;
+                if (fprintf(f, "%s%s", t, prefix) < 0)
+                    ERR(EOF);
+                FLUSH_LOOKAHEAD();
+                if (fputc('}', f) == EOF)
+                    ERR(EOF);
                 break;
 
             case UTF8TOTEX_UNSUPPORTED:
@@ -129,13 +114,11 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
         s += length;
     }
 
-    if (lookahead != NULL) {
-        if (fputs(lookahead, f) == EOF) {
-            if (error != NULL)
-                *error = UTF8TOTEX_EOF;
-            return EOF;
-        }
-    }
+    FLUSH_LOOKAHEAD();
+
+#undef FLUSH_LOOKAHEAD
+
+#undef ERR
 
     return 0;
 }
