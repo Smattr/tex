@@ -894,6 +894,12 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
         case L'㏜':                SEQ("Sv");
         case L'㏝':                SEQ("Wb");
 
+        /* Private use area */
+        case 0xe000 ... 0xf8ff:    return UTF8TOTEX_INVALID;
+
+        /* CJK compatibility ideographs */
+        case 0xfada ... 0xfaff:    return UTF8TOTEX_INVALID;
+
         case L'ﬀ':                 SEQ("ff");
         case L'ﬁ':                 SEQ("fi");
         case L'ﬂ':                 SEQ("fl");
@@ -902,6 +908,132 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
         case L'ﬅ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'ﬆ':                 SEQ("st");
         case 0xfb07 ... 0xfb12:    return UTF8TOTEX_INVALID;
+
+        /* Small font variants */
+        case 0xfe6c ... 0xfe6f:    return UTF8TOTEX_INVALID;
+
+        /* Halfwidth and fullwidth forms */
+        case 0xff00:               return UTF8TOTEX_INVALID;
+        case L'！':                SEQ("!");
+        case L'＂':                SEQ("\"");
+        case L'＃':                SEQ("{\\#}");
+        case L'＄':                SEQ("{\\$}");
+        case L'％':                SEQ("{\\%}");
+        case L'＆':                SEQ("{\\&}");
+        case L'＇':                SEQ("'");
+        case L'（':                SEQ("(");
+        case L'）':                SEQ(")");
+        case L'＊':                SEQ("*");
+        case L'＋':                SEQ("+");
+        case L'，':                SEQ(",");
+        case L'－':                SEQ("-");
+        case L'．':                SEQ(".");
+        case L'／':                SEQ(".");
+        case L'０':                SEQ("0");
+        case L'１':                SEQ("1");
+        case L'２':                SEQ("2");
+        case L'３':                SEQ("3");
+        case L'４':                SEQ("4");
+        case L'５':                SEQ("5");
+        case L'６':                SEQ("6");
+        case L'７':                SEQ("7");
+        case L'８':                SEQ("8");
+        case L'９':                SEQ("9");
+        case L'：':                SEQ(":");
+        case L'；':                SEQ(";");
+        case L'＜':                SEQ("{\\textless}");
+        case L'＝':                SEQ("=");
+        case L'＞':                SEQ("{\\textgreater}");
+        case L'？':                SEQ("?");
+        case L'＠':                SEQ("@");
+        case L'Ａ':                SEQ("A");
+        case L'Ｂ':                SEQ("B");
+        case L'Ｃ':                SEQ("C");
+        case L'Ｄ':                SEQ("D");
+        case L'Ｅ':                SEQ("E");
+        case L'Ｆ':                SEQ("F");
+        case L'Ｇ':                SEQ("G");
+        case L'Ｈ':                SEQ("H");
+        case L'Ｉ':                SEQ("I");
+        case L'Ｊ':                SEQ("J");
+        case L'Ｋ':                SEQ("K");
+        case L'Ｌ':                SEQ("L");
+        case L'Ｍ':                SEQ("M");
+        case L'Ｎ':                SEQ("N");
+        case L'Ｏ':                SEQ("O");
+        case L'Ｐ':                SEQ("P");
+        case L'Ｑ':                SEQ("Q");
+        case L'Ｒ':                SEQ("R");
+        case L'Ｓ':                SEQ("S");
+        case L'Ｔ':                SEQ("T");
+        case L'Ｕ':                SEQ("U");
+        case L'Ｖ':                SEQ("V");
+        case L'Ｗ':                SEQ("W");
+        case L'Ｘ':                SEQ("X");
+        case L'Ｙ':                SEQ("Y");
+        case L'Ｚ':                SEQ("Z");
+        case L'［':                SEQ("[");
+        case L'＼':                SEQ("{\\letterbackslash}");
+        case L'］':                SEQ("]");
+        case L'＾':                SEQ("{\\letterhat}");
+        case L'＿':                SEQ("{\\letterunderscore}");
+        case L'｀':                SEQ("{\\`}");
+        case L'ａ':                SEQ("a");
+        case L'ｂ':                SEQ("b");
+        case L'ｃ':                SEQ("c");
+        case L'ｄ':                SEQ("d");
+        case L'ｅ':                SEQ("e");
+        case L'ｆ':                SEQ("f");
+        case L'ｇ':                SEQ("g");
+        case L'ｈ':                SEQ("h");
+        case L'ｉ':                SEQ("i");
+        case L'ｊ':                SEQ("j");
+        case L'ｋ':                SEQ("k");
+        case L'ｌ':                SEQ("l");
+        case L'ｍ':                SEQ("m");
+        case L'ｎ':                SEQ("n");
+        case L'ｏ':                SEQ("o");
+        case L'ｐ':                SEQ("p");
+        case L'ｑ':                SEQ("q");
+        case L'ｒ':                SEQ("r");
+        case L'ｓ':                SEQ("s");
+        case L'ｔ':                SEQ("t");
+        case L'ｕ':                SEQ("u");
+        case L'ｖ':                SEQ("v");
+        case L'ｗ':                SEQ("w");
+        case L'ｘ':                SEQ("x");
+        case L'ｙ':                SEQ("y");
+        case L'ｚ':                SEQ("z");
+        case L'｛':                SEQ("{\\{}");
+        case L'｜':                SEQ("|");
+        case L'｝':                SEQ("{\\}}");
+        case L'～':                SEQ("{\\lettertilde}");
+        case L'｟':                SEQ("((");
+        case L'｠':                SEQ("))");
+        case 0xffc0 ... 0xffc1:    return UTF8TOTEX_INVALID;
+        case 0xffc8 ... 0xffc9:    return UTF8TOTEX_INVALID;
+        case 0xffd0 ... 0xffd1:    return UTF8TOTEX_INVALID;
+        case 0xffd8 ... 0xffd9:    return UTF8TOTEX_INVALID;
+        case 0xffdd ... 0xffdf:    return UTF8TOTEX_INVALID;
+        case L'￠':                SEQ("{\\textcent}");
+        case L'￡':                SEQ("{\\pounds}");
+        case L'￢':                SEQ_TC("{\\textlnot}");
+        case L'￣':                SEQ("{\\= }");
+
+        case 0xffe7:               return UTF8TOTEX_INVALID;
+
+        case 0xffef ... 0xfff8:    return UTF8TOTEX_INVALID;
+
+        case 0xfffc:               return UTF8TOTEX_INVALID;
+
+        /* They actually created two characters called "Not a character." We
+         * have reached full inception.
+         */
+        case 0xfffe ... 0xffff:    return UTF8TOTEX_INVALID;
+
+        case 0x1000c:              return UTF8TOTEX_INVALID;
+
+        case 0x10027:              return UTF8TOTEX_INVALID;
 
         /* UTF-8 characters are a maximum of 21 bits */
         case 1 << 21 ... UINT32_MAX:
