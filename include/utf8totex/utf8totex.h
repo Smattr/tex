@@ -3,44 +3,25 @@
 #include <stdio.h>
 #include <stdint.h>
 
-/* High level interface.
- *
- * Unless you really need to process your input character-by-character or need
- * to avoid dynamic memory allocation, this is likely all you need.
- */
-
-/**
- * @brief Translate a UTF-8 string to an ASCII TeX string.
- *
- * @param s Input string.
- * @return Output string or `NULL` if the operation failed. The caller should
- *         eventually free this pointer.
- */
-char *utf8totex_from_str(const char *s) __attribute__((nonnull));
-
-/**
- * @brief Translate a UTF-8 string to an ASCII TeX string and write the result
- *        to the given file.
- *
- * @param s Input string.
- * @param f File to write to.
- * @return `0` on success.
- */
-int utf8totex_fputs(const char *s, FILE *f) __attribute__((nonnull));
-
-/* Low level interface.
- *
- * It is unlikely you will need this unless you need to move
- * character-by-character or avoid dynamic memory allocation for some reason.
- */
-
 /**
  * @brief Return type of `utf8totex_from_char` indicating what kind of data the given
  *        character was.
  */
 typedef enum {
 
+    UTF8TOTEX_EOF = EOF, /**< Something went wrong during output or internal
+                              resource allocation. */
+
     UTF8TOTEX_INVALID, /**< The given data was not a valid unicode character. */
+
+    UTF8TOTEX_UNSUPPORTED, /**< The data was a valid unicode character, but there is
+                          no matching TeX escape sequence for it. This may mean
+                          that the valid escape sequence has just not been
+                          implemented yet. */
+
+    UTF8TOTEX_BAD_MODIFIER, /**< A modifier appeared after something which no
+                                 modifier should appear afterwards (e.g. start
+                                 of string). */
 
     UTF8TOTEX_ASCII, /**< The given data was an ASCII character and can be output
                     as-is. However, beware that if the next piece of data is a
@@ -64,12 +45,40 @@ typedef enum {
     UTF8TOTEX_SEQUENCE_TEXTCOMP, /**< As for `UTF8TOTEX_SEQUENCE` except this sequence
                                 requires the textcomp package. */
 
-    UTF8TOTEX_UNSUPPORTED, /**< The data was a valid unicode character, but there is
-                          no matching TeX escape sequence for it. This may mean
-                          that the valid escape sequence has just not been
-                          implemented yet. */
-
 } utf8totex_char_t;
+
+/* High level interface.
+ *
+ * Unless you really need to process your input character-by-character or need
+ * to avoid dynamic memory allocation, this is likely all you need.
+ */
+
+/**
+ * @brief Translate a UTF-8 string to an ASCII TeX string.
+ *
+ * @param s Input string.
+ * @param error Optional output pointer for the error value if there was one.
+ * @return Output string or `NULL` if the operation failed. The caller should
+ *         eventually free this pointer.
+ */
+char *utf8totex_from_str(const char *s, utf8totex_char_t *error) __attribute__((nonnull(1)));
+
+/**
+ * @brief Translate a UTF-8 string to an ASCII TeX string and write the result
+ *        to the given file.
+ *
+ * @param s Input string.
+ * @param f File to write to.
+ * @param error Optional output pointer for the error value if there was one.
+ * @return `0` on success.
+ */
+int utf8totex_fputs(const char *s, FILE *f, utf8totex_char_t *error) __attribute__((nonnull(1, 2)));
+
+/* Low level interface.
+ *
+ * It is unlikely you will need this unless you need to move
+ * character-by-character or avoid dynamic memory allocation for some reason.
+ */
 
 /**
  * @brief Translate a single UTF-8 character into TeX output.

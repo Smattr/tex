@@ -3,7 +3,7 @@
 #include "utf8totex/utf8totex.h"
 #include <wchar.h>
 
-char *utf8totex_from_str(const char *s) {
+char *utf8totex_from_str(const char *s, utf8totex_char_t *error) {
 
     /* setup a dynamically growing buffer */
     char *buffer_p;
@@ -12,9 +12,9 @@ char *utf8totex_from_str(const char *s) {
     if (buffer == NULL)
         return NULL;
 
-    int r = utf8totex_fputs(s, buffer);
+    int r = utf8totex_fputs(s, buffer, error);
     fclose(buffer);
-    if (r == EOF) {
+    if (r != 0) {
         free(buffer_p);
         return NULL;
     }

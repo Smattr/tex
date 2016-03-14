@@ -34,8 +34,14 @@ int main(int argc, char **argv) {
     size_t n;
     unsigned int lineno = 1;
     while (getline(&line, &n, in) != -1) {
-        if (utf8totex_fputs(line, out) == EOF) {
-            fprintf(stderr, "failed to write line %u to output\n", lineno);
+        utf8totex_char_t error;
+        if (utf8totex_fputs(line, out, &error) == EOF) {
+            fprintf(stderr, "failed to write line %u to output: %s\n", lineno,
+                error == UTF8TOTEX_EOF ? "resource allocation failure" :
+                error == UTF8TOTEX_INVALID ? "invalid UTF-8 character" :
+                error == UTF8TOTEX_UNSUPPORTED ? "unsupported UTF-8 character" :
+                error == UTF8TOTEX_BAD_MODIFIER ? "bad modifier character" :
+                "unknown");
             fclose(out);
             fclose(in);
             return -1;
