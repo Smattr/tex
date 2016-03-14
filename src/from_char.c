@@ -894,6 +894,15 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
         case L'㏜':                SEQ("Sv");
         case L'㏝':                SEQ("Wb");
 
+        case L'ﬀ':                 SEQ("ff");
+        case L'ﬁ':                 SEQ("fi");
+        case L'ﬂ':                 SEQ("fl");
+        case L'ﬃ':                 SEQ("ffi");
+        case L'ﬄ':                 SEQ("ffl");
+        case L'ﬅ':                 return UTF8TOTEX_UNSUPPORTED;
+        case L'ﬆ':                 SEQ("st");
+        case 0xfb07 ... 0xfb12:    return UTF8TOTEX_INVALID;
+
         /* UTF-8 characters are a maximum of 21 bits */
         case 1 << 21 ... UINT32_MAX:
             return UTF8TOTEX_INVALID;
