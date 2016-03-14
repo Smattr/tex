@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
 
@@ -57,22 +58,26 @@ typedef enum {
  * @brief Translate a UTF-8 string to an ASCII TeX string.
  *
  * @param s Input string.
+ * @param bibtex Whether to operator in BiBTeX mode (see sources).
  * @param error Optional output pointer for the error value if there was one.
  * @return Output string or `NULL` if the operation failed. The caller should
  *         eventually free this pointer.
  */
-char *utf8totex_from_str(const char *s, utf8totex_char_t *error) __attribute__((nonnull(1)));
+char *utf8totex_from_str(const char *s, bool bibtex, utf8totex_char_t *error)
+    __attribute__((nonnull(1)));
 
 /**
  * @brief Translate a UTF-8 string to an ASCII TeX string and write the result
  *        to the given file.
  *
  * @param s Input string.
+ * @param bibtex Whether to operate in BiBTeX mode (see sources).
  * @param f File to write to.
  * @param error Optional output pointer for the error value if there was one.
  * @return `0` on success.
  */
-int utf8totex_fputs(const char *s, FILE *f, utf8totex_char_t *error) __attribute__((nonnull(1, 2)));
+int utf8totex_fputs(const char *s, bool bibtex, FILE *f,
+    utf8totex_char_t *error) __attribute__((nonnull(1, 3)));
 
 /* Low level interface.
  *

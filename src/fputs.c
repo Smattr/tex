@@ -1,17 +1,20 @@
 #include <assert.h>
 #include "internal.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "utf8totex/utf8totex.h"
 
-int utf8totex_fputs(const char *s, FILE *f, utf8totex_char_t *error) {
+int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error) {
     assert(s != NULL);
     assert(f != NULL);
 
     char _lookahead[2] = {0};
     const char* lookahead = NULL;
+
+    unsigned brace_depth = 0;
 
     uint32_t c;
     int length;
@@ -22,6 +25,37 @@ int utf8totex_fputs(const char *s, FILE *f, utf8totex_char_t *error) {
             if (error != NULL)
                 *error = UTF8TOTEX_INVALID;
             return EOF;
+        }
+
+        if (bibtex) {
+            if (c == L'{' || brace_depth > 0) {
+                if (length != 1) {
+                    if (error != NULL)
+                        *error = UTF8TOTEX_INVALID; /* XXX */
+                    return EOF;
+                }
+                if (lookahead != NULL) {
+                    if (fputs(lookahead, f) == EOF) {
+                        if (error != NULL)
+                            *error = UTF8TOTEX_EOF;
+                        return EOF;
+                    }
+                    lookahead = NULL;
+                }
+                if (fputc(c, f) == EOF) {
+                    if (error != NULL)
+                        *error = UTF8TOTEX_EOF;
+                    return EOF;
+                }
+                if (c == L'{') {
+                    brace_depth++;
+                } else if (c == '}') {
+                    assert(brace_depth > 0);
+                    brace_depth--;
+                }
+                s++;
+                continue;
+            }
         }
 
         const char *t;

@@ -1,9 +1,10 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "utf8totex/utf8totex.h"
 #include <wchar.h>
 
-char *utf8totex_from_str(const char *s, utf8totex_char_t *error) {
+char *utf8totex_from_str(const char *s, bool bibtex, utf8totex_char_t *error) {
 
     /* setup a dynamically growing buffer */
     char *buffer_p;
@@ -12,7 +13,7 @@ char *utf8totex_from_str(const char *s, utf8totex_char_t *error) {
     if (buffer == NULL)
         return NULL;
 
-    int r = utf8totex_fputs(s, buffer, error);
+    int r = utf8totex_fputs(s, bibtex, buffer, error);
     fclose(buffer);
     if (r != 0) {
         free(buffer_p);

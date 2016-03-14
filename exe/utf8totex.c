@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <locale.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "utf8totex/utf8totex.h"
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
     unsigned int lineno = 1;
     while (getline(&line, &n, in) != -1) {
         utf8totex_char_t error;
-        if (utf8totex_fputs(line, out, &error) == EOF) {
+        if (utf8totex_fputs(line, false, out, &error) == EOF) {
             fprintf(stderr, "failed to write line %u to output: %s\n", lineno,
                 error == UTF8TOTEX_EOF ? "resource allocation failure" :
                 error == UTF8TOTEX_INVALID ? "invalid UTF-8 character" :
