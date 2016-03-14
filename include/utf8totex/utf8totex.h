@@ -27,7 +27,7 @@ typedef enum {
     UTF8TOTEX_BAD_LITERAL, /**< A non-ASCII character occurred inside a literal
                                 block or in something that was interpreted as a
                                 LaTeX macro. This error can only occur when
-                                bibtex=true. */
+                                fuzzy=true. */
 
     UTF8TOTEX_ASCII, /**< The given data was an ASCII character and can be output
                     as-is. However, beware that if the next piece of data is a
@@ -63,12 +63,15 @@ typedef enum {
  * @brief Translate a UTF-8 string to an ASCII TeX string.
  *
  * @param s Input string.
- * @param bibtex Whether to operator in BiBTeX mode (see sources).
+ * @param fuzzy Whether to assume the input may be TeX. If this parameter is
+ *              true, we assume the input string may be valid TeX and try to
+ *              avoid translating things that look like macros, braced
+ *              expressions or math mode expressions.
  * @param error Optional output pointer for the error value if there was one.
  * @return Output string or `NULL` if the operation failed. The caller should
  *         eventually free this pointer.
  */
-char *utf8totex_from_str(const char *s, bool bibtex, utf8totex_char_t *error)
+char *utf8totex_from_str(const char *s, bool fuzzy, utf8totex_char_t *error)
     __attribute__((nonnull(1)));
 
 /**
@@ -76,12 +79,15 @@ char *utf8totex_from_str(const char *s, bool bibtex, utf8totex_char_t *error)
  *        to the given file.
  *
  * @param s Input string.
- * @param bibtex Whether to operate in BiBTeX mode (see sources).
+ * @param fuzzy Whether to assume the input may be TeX. If this parameter is
+ *              true, we assume the input string may be valid TeX and try to
+ *              avoid translating things that look like macros, braced
+ *              expressions or math mode expressions.
  * @param f File to write to.
  * @param error Optional output pointer for the error value if there was one.
  * @return `0` on success.
  */
-int utf8totex_fputs(const char *s, bool bibtex, FILE *f,
+int utf8totex_fputs(const char *s, bool fuzzy, FILE *f,
     utf8totex_char_t *error) __attribute__((nonnull(1, 3)));
 
 /* Low level interface.

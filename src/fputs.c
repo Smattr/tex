@@ -8,7 +8,7 @@
 #include <string.h>
 #include "utf8totex/utf8totex.h"
 
-int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error) {
+int utf8totex_fputs(const char *s, bool fuzzy, FILE *f, utf8totex_char_t *error) {
     assert(s != NULL);
     assert(f != NULL);
 
@@ -58,7 +58,7 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
         switch (state) {
 
             case IDLE: {
-                if (bibtex) {
+                if (fuzzy) {
                     if (c == L'\\') {
                         FLUSH_LOOKAHEAD();
                         PUTC('\\');
@@ -133,7 +133,7 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
 
             } case MACRO: {
 
-                assert(bibtex);
+                assert(fuzzy);
 
                 if (length != 1 || (!isalpha(c) && c != L'{'))
                     ERR(BAD_LITERAL);
@@ -150,7 +150,7 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
 
             } case BRACED: {
 
-                assert(bibtex);
+                assert(fuzzy);
                 assert(brace_depth > 0);
 
                 if (length != 1)
@@ -170,7 +170,7 @@ int utf8totex_fputs(const char *s, bool bibtex, FILE *f, utf8totex_char_t *error
 
             } case MATH: {
 
-                assert(bibtex);
+                assert(fuzzy);
 
                 if (length != 1)
                     ERR(BAD_LITERAL);
