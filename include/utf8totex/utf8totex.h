@@ -24,6 +24,11 @@ typedef enum {
                                  modifier should appear afterwards (e.g. start
                                  of string). */
 
+    UTF8TOTEX_BAD_LITERAL, /**< A non-ASCII character occurred inside a literal
+                                block or in something that was interpreted as a
+                                LaTeX macro. This error can only occur when
+                                bibtex=true. */
+
     UTF8TOTEX_ASCII, /**< The given data was an ASCII character and can be output
                     as-is. However, beware that if the next piece of data is a
                     `UTF8TOTEX_MODIFIER`, it may change this character's meaning. */
