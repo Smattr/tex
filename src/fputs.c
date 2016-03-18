@@ -91,8 +91,6 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
                         break;
 
                     case UTF8TOTEX_SEQUENCE:
-                    case UTF8TOTEX_SEQUENCE_T1:
-                    case UTF8TOTEX_SEQUENCE_TEXTCOMP:
                         FLUSH_LOOKAHEAD();
                         lookahead = t;
                         break;

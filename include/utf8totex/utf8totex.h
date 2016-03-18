@@ -27,46 +27,45 @@ typedef struct {
  */
 typedef enum {
 
-    UTF8TOTEX_EOF = EOF, /**< Something went wrong during output or internal
-                              resource allocation. */
+    UTF8TOTEX_EOF = EOF,
+        /**< Something went wrong during output or internal resource
+             allocation. */
 
-    UTF8TOTEX_INVALID, /**< The given data was not a valid unicode character. */
+    UTF8TOTEX_INVALID,
+        /**< The given data was not a valid unicode character. */
 
-    UTF8TOTEX_UNSUPPORTED, /**< The data was a valid unicode character, but there is
-                          no matching TeX escape sequence for it. This may mean
-                          that the valid escape sequence has just not been
-                          implemented yet. */
+    UTF8TOTEX_UNSUPPORTED,
+        /**< The data was a valid unicode character, but there is no matching
+             TeX escape sequence for it in the given environment. This may mean
+             that the valid escape sequence has just not been implemented
+             yet. */
 
-    UTF8TOTEX_BAD_MODIFIER, /**< A modifier appeared after something which no
-                                 modifier should appear afterwards (e.g. start
-                                 of string). */
+    UTF8TOTEX_BAD_MODIFIER,
+        /**< A modifier appeared after something which no modifier should appear
+             afterwards (e.g. start of string). */
 
-    UTF8TOTEX_BAD_LITERAL, /**< A non-ASCII character occurred inside a literal
-                                block or in something that was interpreted as a
-                                LaTeX macro. This error can only occur when
-                                fuzzy=true. */
+    UTF8TOTEX_BAD_LITERAL,
+        /**< A non-ASCII character occurred inside a literal block or in
+             something that was interpreted as a TeX macro. This error can only
+             occur when fuzzy=true. */
 
-    UTF8TOTEX_ASCII, /**< The given data was an ASCII character and can be output
-                    as-is. However, beware that if the next piece of data is a
-                    `UTF8TOTEX_MODIFIER`, it may change this character's meaning. */
+    UTF8TOTEX_ASCII,
+        /**< The given data was an ASCII character and can be output as-is.
+             However, beware that if the next piece of data is a
+             `UTF8TOTEX_MODIFIER`, it may change this character's meaning. */
 
-    UTF8TOTEX_SEQUENCE, /**< The given data was escaped into a sequence of ASCII
-                       characters that are now in the `s` output buffer as a
-                       NUL-terminated string that can be output. */
+    UTF8TOTEX_SEQUENCE,
+        /**< The given data was escaped into a sequence of ASCII characters that
+             are now in the `s` output buffer as a NUL-terminated string that
+             can be output. */
 
-    UTF8TOTEX_MODIFIER, /**< The previous character was an ASCII character and needs
-                       to be modified. The text to output before the character
-                       is in the `s` output buffer as a NUL-terminated string.
-                       The character should be followed by the string "}". If
-                       the previous character was not an ASCII character, you
-                       have malformed input. See the handling of this in
-                       `utf8totex_fputs`. */
-
-    UTF8TOTEX_SEQUENCE_T1, /**< As for `UTF8TOTEX_SEQUENCE` except this sequence requires
-                          an alternate font encoding like T1. */
-
-    UTF8TOTEX_SEQUENCE_TEXTCOMP, /**< As for `UTF8TOTEX_SEQUENCE` except this sequence
-                                requires the textcomp package. */
+    UTF8TOTEX_MODIFIER,
+        /**< The previous character was an ASCII character and needs to be
+             modified. The text to output before the character is in the `s`
+             output buffer as a NUL-terminated string. The character should be
+             followed by the string "}". If the previous character was not an
+             ASCII character, you have malformed input. See the handling of this
+             in `utf8totex_fputs`. */
 
 } utf8totex_char_t;
 
