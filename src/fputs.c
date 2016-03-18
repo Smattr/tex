@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <ctype.h>
 #include "internal.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -134,7 +133,7 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
 
                 assert(fuzzy);
 
-                if (length != 1 || (!isalpha(c) && c != L'{'))
+                if (length != 1 || c > 127)
                     ERR(BAD_LITERAL);
 
                 assert(lookahead == NULL);
