@@ -666,6 +666,16 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
         case L'Ỻ':                 SEQ("IL");
         case L'ỻ' ... L'ỿ':        return UTF8TOTEX_UNSUPPORTED;
 
+        /* Greek extended */
+        case L'Ῐ':                 SEQ("{\\u I}");
+        case L'Ῑ':                 SEQ("{\\=I}");
+        case 0x1fdc:               return UTF8TOTEX_INVALID;
+        case L'Ῠ':                 SEQ("{\\u Y}");
+        case L'Ῡ':                 SEQ("{\\=Y}");
+        case 0x1ff0 ... 0x1ff1:    return UTF8TOTEX_INVALID;
+        case 0x1ff5:               return UTF8TOTEX_INVALID;
+        case 0x1fff:               return UTF8TOTEX_INVALID;
+
         /* Letterlike symbols */
         case L'℃':                 SEQ_TC("{\\textdegree}C");
         case L'℉':                 SEQ_TC("{\\textdegree}F");
@@ -801,6 +811,81 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
         case L'⊗':                 SEQ("$\\otimes$");
         case L'⊘':                 SEQ("$\\oslash$");
         case L'⊙':                 SEQ("$\\odot$");
+
+        /* Enclosed alphanumerics */
+        case L'⑴':                 SEQ("(1)");
+        case L'⑵':                 SEQ("(2)");
+        case L'⑶':                 SEQ("(3)");
+        case L'⑷':                 SEQ("(4)");
+        case L'⑸':                 SEQ("(5)");
+        case L'⑹':                 SEQ("(6)");
+        case L'⑺':                 SEQ("(7)");
+        case L'⑻':                 SEQ("(8)");
+        case L'⑼':                 SEQ("(9)");
+        case L'⑽':                 SEQ("(10)");
+        case L'⑾':                 SEQ("(11)");
+        case L'⑿':                 SEQ("(12)");
+        case L'⒀':                 SEQ("(13)");
+        case L'⒁':                 SEQ("(14)");
+        case L'⒂':                 SEQ("(15)");
+        case L'⒃':                 SEQ("(16)");
+        case L'⒄':                 SEQ("(17)");
+        case L'⒅':                 SEQ("(18)");
+        case L'⒆':                 SEQ("(19)");
+        case L'⒇':                 SEQ("(20)");
+        case L'⒈':                 SEQ("1.");
+        case L'⒉':                 SEQ("2.");
+        case L'⒊':                 SEQ("3.");
+        case L'⒋':                 SEQ("4.");
+        case L'⒌':                 SEQ("5.");
+        case L'⒍':                 SEQ("6.");
+        case L'⒎':                 SEQ("7.");
+        case L'⒏':                 SEQ("8.");
+        case L'⒐':                 SEQ("9.");
+        case L'⒑':                 SEQ("10.");
+        case L'⒒':                 SEQ("11.");
+        case L'⒓':                 SEQ("12.");
+        case L'⒔':                 SEQ("13.");
+        case L'⒕':                 SEQ("14.");
+        case L'⒖':                 SEQ("15.");
+        case L'⒗':                 SEQ("16.");
+        case L'⒘':                 SEQ("17.");
+        case L'⒙':                 SEQ("18.");
+        case L'⒚':                 SEQ("19.");
+        case L'⒛':                 SEQ("20.");
+        case L'⒜':                 SEQ("(a)");
+        case L'⒝':                 SEQ("(b)");
+        case L'⒞':                 SEQ("(c)");
+        case L'⒟':                 SEQ("(d)");
+        case L'⒠':                 SEQ("(e)");
+        case L'⒡':                 SEQ("(f)");
+        case L'⒢':                 SEQ("(g)");
+        case L'⒣':                 SEQ("(h)");
+        case L'⒤':                 SEQ("(i)");
+        case L'⒥':                 SEQ("(j)");
+        case L'⒦':                 SEQ("(k)");
+        case L'⒧':                 SEQ("(l)");
+        case L'⒨':                 SEQ("(m)");
+        case L'⒩':                 SEQ("(n)");
+        case L'⒪':                 SEQ("(o)");
+        case L'⒫':                 SEQ("(p)");
+        case L'⒬':                 SEQ("(q)");
+        case L'⒭':                 SEQ("(r)");
+        case L'⒮':                 SEQ("(s)");
+        case L'⒯':                 SEQ("(t)");
+        case L'⒰':                 SEQ("(u)");
+        case L'⒱':                 SEQ("(v)");
+        case L'⒲':                 SEQ("(w)");
+        case L'⒳':                 SEQ("(x)");
+        case L'⒴':                 SEQ("(y)");
+        case L'⒵':                 SEQ("(z)");
+
+        /* Supplemental maths */
+        case L'⨣':                 SEQ("${\\hat+}$");
+        case L'⨤':                 SEQ("${\\tilde+}$");
+        case L'⨰':                 SEQ("${\\dot\\times}$");
+        case L'⩑':                 SEQ("${\\dot\\wedge}$");
+        case L'⩒':                 SEQ("${\\dot\\vee}$");
 
         /* CJK compatibility */
         case L'㍱':                SEQ("hPa");
