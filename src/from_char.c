@@ -14,6 +14,13 @@
  * fonts. This is probably not ideal if you are writing a document entirely in
  * these characters. Please let me know if this bothers you and you have a
  * better suggestion for how to handle these.
+ *
+ * Some general guidance if you're modifying this file:
+ *
+ *   * "{\\'a}" > "\\'{a}" because it will sort correctly in bibliographies and
+ *     whatnot.
+ *   * "{\\aa}" > "{\\r a}" because it is fewer characters. In a large document
+ *     these optimisations can have an impact.
  */
 
 utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
