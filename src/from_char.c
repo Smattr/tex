@@ -37,14 +37,20 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 
 #define SEQ_T1(str) \
     do { \
-        *(s) = (str); \
-        return UTF8TOTEX_SEQUENCE_T1; \
+        if (env.font_encoding == UTF8TOTEX_FE_T1) { \
+            *(s) = (str); \
+            return UTF8TOTEX_SEQUENCE; \
+        } \
+        return UTF8TOTEX_UNSUPPORTED; \
     } while (0)
 
 #define SEQ_TC(str) \
     do { \
-        *(s) = (str); \
-        return UTF8TOTEX_SEQUENCE_TEXTCOMP; \
+        if (env.textcomp) { \
+            *(s) = (str); \
+            return UTF8TOTEX_SEQUENCE; \
+        } \
+        return UTF8TOTEX_UNSUPPORTED; \
     } while (0)
 
 #define ACC(str) \
