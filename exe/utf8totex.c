@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <getopt.h>
 #include <locale.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -9,35 +10,92 @@ int main(int argc, char **argv) {
 
     setlocale(LC_ALL, NULL);
 
-    FILE *in;
-    if (argc > 1) {
-        in = fopen(argv[1], "r");
-        if (in == NULL) {
-            fprintf(stderr, "failed to open %s for reading\n", argv[1]);
-            return -1;
+    FILE *in = NULL;
+    FILE *out = NULL;
+
+    int _fuzzy = 0;
+    int _encoding = 0;
+    int _textcomp = 0;
+    while (true) {
+        struct option options[] = {
+            {"input", required_argument, 0, 'i'},
+            {"output", required_argument, 0, 'o'},
+            {"ot1", no_argument, &_encoding, 0},
+            {"t1", no_argument, &_encoding, 1},
+            {"textcomp", no_argument, &_textcomp, 1},
+            {"fuzzy", no_argument, &_fuzzy, 1},
+            {"no-fuzzy", no_argument, &_fuzzy, 0},
+            {0},
+        };
+
+        int index;
+        int c = getopt_long(argc, argv, "i:o:", options, &index);
+
+        if (c == -1)
+            break;
+
+        switch (c) {
+
+            case 0:
+                break;
+
+            case 'i':
+                if (in != NULL)
+                    fclose(in);
+                in = fopen(optarg, "r");
+                if (in == NULL) {
+                    fprintf(stderr, "failed to open %s for reading\n", optarg);
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case 'o':
+                if (out != NULL)
+                    fclose(out);
+                out = fopen(optarg, "w");
+                if (out == NULL) {
+                    fprintf(stderr, "failed to open %s for writing\n", optarg);
+                    return EXIT_FAILURE;
+                }
+                break;
+
+            case '?':
+                fprintf(stderr, "Usage: %s options...\n"
+                                " --input FILE\n"
+                                " -i FILE         Read from FILE instead of stdin\n"
+                                " --output FILE\n"
+                                " -o FILE         Write to FILE instead of stdout\n"
+                                " --textcomp      Assume \\usepackage{textcomp}\n"
+                                " --t1            Assume font encoding T1\n"
+                                " --ot1           Assume font encoding OT1\n"
+                                " --fuzzy         Enable fuzzy mode\n"
+                                " --no-fuzzy      Disable fuzzy mode\n", argv[0]);
+                return EXIT_FAILURE;
+
+            default:
+                return EXIT_FAILURE;
         }
-    } else {
-        in = stdin;
     }
 
-    FILE *out;
-    if (argc > 2) {
-        out = fopen(argv[2], "w");
-        if (out == NULL) {
-            fprintf(stderr, "failed to open %s for writing\n", argv[2]);
-            return -1;
-        }
-    } else {
+    utf8totex_environment_t env = UTF8TOTEX_DEFAULT_ENVIRONMENT;
+    if (_encoding)
+        env.font_encoding = UTF8TOTEX_FE_T1;
+    if (_textcomp)
+        env.textcomp = true;
+    bool fuzzy = !!_fuzzy;
+
+    if (in == NULL)
+        in = stdin;
+
+    if (out == NULL)
         out = stdout;
-    }
 
     char *line = NULL;
     size_t n;
     unsigned int lineno = 1;
     while (getline(&line, &n, in) != -1) {
         utf8totex_char_t error;
-        if (utf8totex_fputs(line, true, UTF8TOTEX_DEFAULT_ENVIRONMENT, out,
-                &error) == EOF) {
+        if (utf8totex_fputs(line, fuzzy, env, out, &error) == EOF) {
             fprintf(stderr, "failed to write line %u to output: %s\n", lineno,
                 error == UTF8TOTEX_EOF ? "resource allocation failure" :
                 error == UTF8TOTEX_INVALID ? "invalid UTF-8 character" :
@@ -46,7 +104,7 @@ int main(int argc, char **argv) {
                 "unknown");
             fclose(out);
             fclose(in);
-            return -1;
+            return EXIT_FAILURE;
         }
         lineno++;
     }
@@ -55,11 +113,11 @@ int main(int argc, char **argv) {
         fprintf(stderr, "failed to read line from input\n");
         fclose(out);
         fclose(in);
-        return -1;
+        return EXIT_FAILURE;
     }
 
     free(line);
     fclose(out);
     fclose(in);
-    return 0;
+    return EXIT_SUCCESS;
 }
