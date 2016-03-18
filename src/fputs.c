@@ -8,7 +8,8 @@
 #include <string.h>
 #include "utf8totex/utf8totex.h"
 
-int utf8totex_fputs(const char *s, bool fuzzy, FILE *f, utf8totex_char_t *error) {
+int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
+        FILE *f, utf8totex_char_t *error) {
     assert(s != NULL);
     assert(f != NULL);
 
@@ -80,7 +81,7 @@ int utf8totex_fputs(const char *s, bool fuzzy, FILE *f, utf8totex_char_t *error)
                 }
 
                 const char *t;
-                utf8totex_char_t type = utf8totex_from_char(&t, c);
+                utf8totex_char_t type = utf8totex_from_char(&t, c, env);
 
                 switch (type) {
                     case UTF8TOTEX_ASCII:

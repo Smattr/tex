@@ -23,7 +23,8 @@
  *     these optimisations can have an impact.
  */
 
-utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) {
+utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
+        utf8totex_environment_t env) {
     assert(s != NULL);
 
     switch (c) {

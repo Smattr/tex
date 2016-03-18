@@ -84,11 +84,13 @@ typedef enum {
  *              true, we assume the input string may be valid TeX and try to
  *              avoid translating things that look like macros, braced
  *              expressions or math mode expressions.
+ * @param env Target TeX environment.
  * @param error Optional output pointer for the error value if there was one.
  * @return Output string or `NULL` if the operation failed. The caller should
  *         eventually free this pointer.
  */
-char *utf8totex_from_str(const char *s, bool fuzzy, utf8totex_char_t *error)
+char *utf8totex_from_str(const char *s, bool fuzzy,
+    utf8totex_environment_t env, utf8totex_char_t *error)
     __attribute__((nonnull(1)));
 
 /**
@@ -100,12 +102,13 @@ char *utf8totex_from_str(const char *s, bool fuzzy, utf8totex_char_t *error)
  *              true, we assume the input string may be valid TeX and try to
  *              avoid translating things that look like macros, braced
  *              expressions or math mode expressions.
+ * @param env Target TeX environment.
  * @param f File to write to.
  * @param error Optional output pointer for the error value if there was one.
  * @return `0` on success.
  */
-int utf8totex_fputs(const char *s, bool fuzzy, FILE *f,
-    utf8totex_char_t *error) __attribute__((nonnull(1, 3)));
+int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
+    FILE *f, utf8totex_char_t *error) __attribute__((nonnull(1, 4)));
 
 /* Low level interface.
  *
@@ -125,6 +128,8 @@ int utf8totex_fputs(const char *s, bool fuzzy, FILE *f,
  *          will end up pointing at a static constant string, valid for the
  *          lifetime of the program, that should not be freed.
  * @param c The input UTF-8 character.
+ * @param env Target TeX environment.
  * @return See the definition of `utf8totex_char_t` for how to interpret this value.
  */
-utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c) __attribute__((nonnull));
+utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
+    utf8totex_environment_t env) __attribute__((nonnull));
