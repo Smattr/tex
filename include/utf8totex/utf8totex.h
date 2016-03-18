@@ -5,6 +5,23 @@
 #include <stdint.h>
 
 /**
+ * @brief A TeX environment, describing font encoding and what packages are in
+ *        use.
+ */
+typedef struct {
+    enum {
+        UTF8TOTEX_FE_OT1 = 0, /**< OT1 font encoding (default) */
+        UTF8TOTEX_FE_T1,      /**< T1 font encoding */
+    } font_encoding;         /**< The font encoding of this environment */
+    bool textcomp;           /**< \usepackage{textcomp}? */
+} utf8totex_environment_t;
+
+/**
+ * @brief The default TeX environment.
+ */
+#define UTF8TOTEX_DEFAULT_ENVIRONMENT ((utf8totex_environment_t){ 0 })
+
+/**
  * @brief Return type of `utf8totex_from_char` indicating what kind of data the given
  *        character was.
  */
