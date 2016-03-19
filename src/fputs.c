@@ -205,8 +205,8 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
 
     FLUSH_LOOKAHEAD();
 
+#undef PUTC
 #undef FLUSH_LOOKAHEAD
-
 #undef ERR
 
     return 0;
