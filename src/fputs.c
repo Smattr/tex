@@ -130,8 +130,7 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
                         if (fprintf(f, "%s%s", t, prefix) < 0)
                             ERR(EOF);
                         FLUSH_LOOKAHEAD();
-                        if (fputc('}', f) == EOF)
-                            ERR(EOF);
+                        PUTC('}');
                         break;
 
                     case UTF8TOTEX_UNSUPPORTED:
