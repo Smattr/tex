@@ -20,6 +20,13 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
         return EOF; \
     } while (0)
 
+    /* Track a single token for lookahead. We need this in order to apply
+     * modifiers (typically accents) to the previous token. `lookahead`, when
+     * not `NULL` always points to either the last returned sequence from
+     * `utf8_from_char` or `_lookahead` if the last thing was an ASCII
+     * character. In the latter case, the ASCII character is in
+     * `_lookahead[0]`.
+     */
     char _lookahead[2] = {0};
     const char* lookahead = NULL;
 #define FLUSH_LOOKAHEAD() \
@@ -39,12 +46,22 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
         } \
     } while (0)
 
+    /* Setup for a state machine. Note that this is only used if `fuzzy` is
+     * `true`.
+     */
     unsigned brace_depth = 0;
     enum {
         IDLE,
+            /**< Start state; no knowledge */
         MACRO,
+            /**< In a macro invocation (we've seen '\' and now reading ASCII
+                 characters). */
         BRACED,
+            /**< We've seen a '{' (either while in `IDLE` or `MACRO`) and now
+                 outputting literals while looking for a matching '}'. */
         MATH,
+            /**< We've seen a '$' and now outputting literals while looking for
+                 another '$'. */
     } state = IDLE;
 
     uint32_t c;
@@ -133,6 +150,7 @@ int utf8totex_fputs(const char *s, bool fuzzy, utf8totex_environment_t env,
 
                 assert(fuzzy);
 
+                /* Don't support UTF-8 characters in a macro name. */
                 if (length != 1 || c > 127)
                     ERR(BAD_LITERAL);
 
