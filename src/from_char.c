@@ -196,8 +196,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ā':                 SEQ("{\\=a}");
         case L'Ă':                 SEQ("{\\u A}");
         case L'ă':                 SEQ("{\\u a}");
-        case L'Ą':                 SEQ("{\\k A}");
-        case L'ą':                 SEQ("{\\k a}");
+        case L'Ą':                 SEQ_T1("{\\k A}");
+        case L'ą':                 SEQ_T1("{\\k a}");
         case L'Ć':                 SEQ("{\\'C}");
         case L'ć':                 SEQ("{\\'c}");
         case L'Ĉ':                 SEQ("{\\^C}");
@@ -216,8 +216,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ĕ':                 SEQ("{\\u e}");
         case L'Ė':                 SEQ("{\\.E}");
         case L'ė':                 SEQ("{\\.e}");
-        case L'Ę':                 SEQ("{\\k E}");
-        case L'ę':                 SEQ("{\\k e}");
+        case L'Ę':                 SEQ_T1("{\\k E}");
+        case L'ę':                 SEQ_T1("{\\k e}");
         case L'Ě':                 SEQ("{\\v E}");
         case L'ě':                 SEQ("{\\v e}");
         case L'Ĝ':                 SEQ("{\\^G}");
@@ -238,8 +238,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ī':                 SEQ("{\\=\\i}");
         case L'Ĭ':                 SEQ("{\\u I}");
         case L'ĭ':                 SEQ("{\\u\\i}");
-        case L'Į':                 SEQ("{\\k I}");
-        case L'į':                 SEQ("{\\k i}");
+        case L'Į':                 SEQ_T1("{\\k I}");
+        case L'į':                 SEQ_T1("{\\k i}");
         case L'İ':                 SEQ("{\\.I}");
         case L'ı':                 SEQ("{\\i}");
         case L'Ĳ':                 SEQ("IJ"); /* no native ligatures it seems */
@@ -306,8 +306,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ů':                 SEQ("{\\r u}");
         case L'Ű':                 SEQ("{\\H U}");
         case L'ű':                 SEQ("{\\H u}");
-        case L'Ų':                 SEQ("{\\k U}");
-        case L'ų':                 SEQ("{\\k u}");
+        case L'Ų':                 SEQ_T1("{\\k U}");
+        case L'ų':                 SEQ_T1("{\\k u}");
         case L'Ŵ':                 SEQ("{\\^W}");
         case L'ŵ':                 SEQ("{\\^w}");
         case L'Ŷ':                 SEQ("{\\^Y}");
@@ -349,8 +349,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ǧ':                 SEQ("{\\v g}");
         case L'Ǩ':                 SEQ("{\\v K}");
         case L'ǩ':                 SEQ("{\\v k}");
-        case L'Ǫ':                 SEQ("{\\k O}");
-        case L'ǫ':                 SEQ("{\\k o}");
+        case L'Ǫ':                 SEQ_T1("{\\k O}");
+        case L'ǫ':                 SEQ_T1("{\\k o}");
         case L'Ǭ' ... L'ǯ':        return UTF8TOTEX_UNSUPPORTED;
         case L'ǰ':                 SEQ("{\\v\\j}");
         case L'Ǳ':                 SEQ("DZ");
