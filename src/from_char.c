@@ -37,7 +37,11 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 
 #define SEQ_T1(str) \
     do { \
-        if (env.font_encoding == UTF8TOTEX_FE_T1) { \
+        if (env.font_encoding == UTF8TOTEX_FE_T1 || \
+            env.font_encoding == UTF8TOTEX_FE_T2A || \
+            env.font_encoding == UTF8TOTEX_FE_T2B || \
+            env.font_encoding == UTF8TOTEX_FE_T2C || \
+            env.font_encoding == UTF8TOTEX_FE_X2) { \
             *(s) = (str); \
             return UTF8TOTEX_SEQUENCE; \
         } \

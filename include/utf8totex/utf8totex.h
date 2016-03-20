@@ -7,11 +7,32 @@
 /**
  * @brief A TeX environment, describing font encoding and what packages are in
  *        use.
+ *
+ * To understand font encodings, it is recommended to refer to "LaTeX font
+ * encodings" by Frank Mittelbach, Robin Fairbairns and Werner Lemberg.
  */
 typedef struct {
     enum {
-        UTF8TOTEX_FE_OT1 = 0, /**< OT1 font encoding (default) */
-        UTF8TOTEX_FE_T1,      /**< T1 font encoding */
+        UTF8TOTEX_FE_OT1 = 0, /**< OT1 (default) */
+        UTF8TOTEX_FE_OT2,     /**< OT2 (Cyrillic) */
+        UTF8TOTEX_FE_OT3,     /**< OT3 (UW IPA) */
+        UTF8TOTEX_FE_OT4,     /**< OT4 (Polish) */
+        /* OT5 is not allocated */
+        UTF8TOTEX_FE_OT6,     /**< OT6 (Armenian) */
+        UTF8TOTEX_FE_T1,      /**< T1 (Cork) */
+        UTF8TOTEX_FE_T2A,     /**< T2A (Cyrillic) */
+        UTF8TOTEX_FE_T2B,     /**< T2B (Cyrillic) */
+        UTF8TOTEX_FE_T2C,     /**< T2C (Cyrillic) */
+        UTF8TOTEX_FE_T3,      /**< T3 (IPA) */
+        UTF8TOTEX_FE_T4,      /**< T4 (African Latin) */
+        UTF8TOTEX_FE_T5,      /**< T5 (Vietnamese) */
+        UTF8TOTEX_FE_TS1,     /**< TS1 (Text companion, Cork) */
+        UTF8TOTEX_FE_TS3,     /**< TS3 (IPA) */
+        UTF8TOTEX_FE_X2,      /**< X2 (Cyrillic container) */
+        UTF8TOTEX_FE_OML,     /**< OML (Math italic) */
+        UTF8TOTEX_FE_OMS,     /**< OMS (Math) */
+        UTF8TOTEX_FE_OMX,     /**< OMX (Math extension) */
+
     } font_encoding;         /**< The font encoding of this environment */
     bool textcomp;           /**< \usepackage{textcomp}? */
 } utf8totex_environment_t;
