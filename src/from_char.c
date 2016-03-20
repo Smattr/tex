@@ -323,6 +323,9 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 
         /* Latin Extended-B */
         /* XXX */
+        case L'Ɩ':                 SEQ("$\\Iota$");
+        case L'Ɵ':                 SEQ("$\\theta$");
+        case L'ǃ':                 SEQ("!");
         case L'Ǆ':                 SEQ("D{\\v Z}");
         case L'ǅ':                 SEQ("D{\\v z}");
         case L'ǆ':                 SEQ("d{\\v z}");
@@ -351,7 +354,10 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'ǩ':                 SEQ("{\\v k}");
         case L'Ǫ':                 SEQ_T1("{\\k O}");
         case L'ǫ':                 SEQ_T1("{\\k o}");
-        case L'Ǭ' ... L'ǯ':        return UTF8TOTEX_UNSUPPORTED;
+        case L'Ǭ':                 SEQ_T1("{\\k{\\=O}}");
+        case L'ǭ':                 SEQ_T1("{\\k{\\=o}}");
+        case L'Ǯ':
+        case L'ǯ':                 return UTF8TOTEX_UNSUPPORTED;
         case L'ǰ':                 SEQ("{\\v\\j}");
         case L'Ǳ':                 SEQ("DZ");
         case L'ǲ':                 SEQ("Dz");
@@ -384,6 +390,28 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'Ȳ':                 SEQ("{\\=Y}");
         case L'ȳ':                 SEQ("{\\=y}");
         case L'ȴ' ... L'ɏ':        return UTF8TOTEX_UNSUPPORTED;
+        
+        case L'ɐ':                 return UTF8TOTEX_UNSUPPORTED;
+        case L'ɑ':                 SEQ("{\\small$\\alpha$}");
+        case L'ɒ' ... L'ɠ':        return UTF8TOTEX_UNSUPPORTED;
+        case L'ɡ':                 SEQ("{\\small g}");
+        case L'ɢ':                 SEQ("{\\small G}");
+        case L'ɣ':                 SEQ("{\\small$\\gamma$}");
+        case L'ɩ':                 SEQ("{\\small$\\iota$}");
+        case L'ɪ':                 SEQ("{\\small I}");
+        case L'ɴ':                 SEQ("{\\small N}");
+        case L'ɶ':                 SEQ("{\\small\\OE}");
+        case L'ɸ':                 SEQ("{\\small$\\phi$}");
+        case L'ʀ':                 SEQ("{\\small R}");
+        case L'ʊ':                 SEQ("{\\small$\\upsilon}");
+        case L'ʏ':                 SEQ("{\\small Y}");
+        case L'ʙ':                 SEQ("{\\small B}");
+        case L'ʜ':                 SEQ("{\\small H}");
+        case L'ʟ':                 SEQ("{\\small L}");
+        case L'ʣ':                 SEQ("{\\small dz}");
+        case L'ʦ':                 SEQ("{\\small ts}");
+        case L'ʪ':                 SEQ("{\\small ls}");
+        case L'ʫ':                 SEQ("{\\small lz}");
 
         case L'ˆ':                 ACC("{\\^");
         case L'ˇ':                 ACC("{\\v ");
