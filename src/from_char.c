@@ -48,14 +48,14 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
                 return UTF8TOTEX_UNSUPPORTED; \
             } while (0)
 
-#define SEQ_TC(str) \
-    do { \
-        if (env.textcomp) { \
-            *(s) = (str); \
-            return UTF8TOTEX_SEQUENCE; \
-        } \
-        return UTF8TOTEX_UNSUPPORTED; \
-    } while (0)
+#define SEQ_TC(x, str) \
+    case x: do { \
+                if (env.textcomp) { \
+                    *(s) = (str); \
+                    return UTF8TOTEX_SEQUENCE; \
+                } \
+                return UTF8TOTEX_UNSUPPORTED; \
+            } while (0)
 
 #define ACC(str) \
     do { \
@@ -98,19 +98,19 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'¡', "{\\textexclamdown}");
         SEQ(L'¢', "{\\textcent}");
         SEQ(L'£', "{\\pounds}");
-        case L'¤':                 SEQ_TC("{\\textcurrency}");
-        case L'¥':                 SEQ_TC("{\\textyen}");
-        case L'¦':                 SEQ_TC("{\\textbrokenbar}");
+        SEQ_TC(L'¤', "{\\textcurrency}");
+        SEQ_TC(L'¥', "{\\textyen}");
+        SEQ_TC(L'¦', "{\\textbrokenbar}");
         SEQ(L'§', "{\\textsection}");
-        case L'¨':                 SEQ_TC("{\\textasciidieresis}");
+        SEQ_TC(L'¨', "{\\textasciidieresis}");
         SEQ(L'©', "{\\copyright}");
         SEQ(L'ª', "{\\textordfeminine}");
         SEQ_T1(L'«', "{\\guillemotleft}");
-        case L'¬':                 SEQ_TC("{\\textlnot}");
+        SEQ_TC(L'¬', "{\\textlnot}");
         SEQ(0x00ad, "\\-"); /* soft hyphen */
         SEQ(L'®', "{\\textregistered}");
         SEQ(L'¯', "{\\= }");
-        case L'°':                 SEQ_TC("{\\textdegree}");
+        SEQ_TC(L'°', "{\\textdegree}");
         SEQ(L'±', "$\\pm$");
         SEQ(L'²', "\\textsuperscript{2}");
         SEQ(L'³', "\\textsuperscript{3}");
@@ -122,9 +122,9 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'¹', "\\textsuperscript{1}");
         SEQ(L'º', "{\\textordmasculine}");
         SEQ_T1(L'»', "{\\guillemotright}");
-        case L'¼':                 SEQ_TC("{\\textonequarter}");
-        case L'½':                 SEQ_TC("{\\textonehalf}");
-        case L'¾':                 SEQ_TC("{\\textthreequarters}");
+        SEQ_TC(L'¼', "{\\textonequarter}");
+        SEQ_TC(L'½', "{\\textonehalf}");
+        SEQ_TC(L'¾', "{\\textthreequarters}");
         SEQ(L'¿', "{\\textquestiondown}");
         SEQ(L'À', "{\\`A}");
         SEQ(L'Á', "{\\'A}");
@@ -716,8 +716,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case 0x1fff:               return UTF8TOTEX_INVALID;
 
         /* Letterlike symbols */
-        case L'℃':                 SEQ_TC("{\\textdegree}C");
-        case L'℉':                 SEQ_TC("{\\textdegree}F");
+        SEQ_TC(L'℃', "{\\textdegree}C");
+        SEQ_TC(L'℉', "{\\textdegree}F");
         SEQ(L'™', "{\\texttrademark}");
 
         /* General punctuation */
@@ -1148,7 +1148,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case 0xffdd ... 0xffdf:    return UTF8TOTEX_INVALID;
         SEQ(L'￠', "{\\textcent}");
         SEQ(L'￡', "{\\pounds}");
-        case L'￢':                SEQ_TC("{\\textlnot}");
+        SEQ_TC(L'￢', "{\\textlnot}");
         SEQ(L'￣', "{\\= }");
 
         case 0xffe7:               return UTF8TOTEX_INVALID;
