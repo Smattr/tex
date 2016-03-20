@@ -73,13 +73,23 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
                       return UTF8TOTEX_UNSUPPORTED; \
                   } while (0)
 
+#define INV(x) \
+    case x: do { \
+                return UTF8TOTEX_INVALID; \
+            } while (0)
+
+#define INV_RANGE(x, y) \
+    case x ... y: do { \
+                      return UTF8TOTEX_INVALID; \
+                  } while (0)
+
         /* Basic Latin */
-        case 0x0000 ... 0x0008:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x0000, 0x0008);
         case L'\t':                return UTF8TOTEX_ASCII;
         case L'\n':                return UTF8TOTEX_ASCII;
-        case 0x000b ... 0x000c:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x000b, 0x000c);
         case L'\r':                return UTF8TOTEX_ASCII;
-        case 0x000e ... 0x001f:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x000e, 0x001f);
         case L' ' ... L'"':        return UTF8TOTEX_ASCII;
         SEQ(L'#', "{\\#}");
         SEQ(L'$', "{\\$}");
@@ -100,10 +110,10 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'|':                 return UTF8TOTEX_ASCII;
         SEQ(L'}', "{\\}}");
         SEQ(L'~', "{\\lettertilde}");
-        case 0x007f:               return UTF8TOTEX_INVALID;
+        INV(0x007f);
 
         /* Latin-1 supplement */
-        case 0x0080 ... 0x009f:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x0080, 0x009f);
         SEQ(0x00a0, "~"); /* non-breaking space */
         SEQ(L'¡', "{\\textexclamdown}");
         SEQ(L'¢', "{\\textcent}");
@@ -456,13 +466,13 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         /* Greek */
         SEQ(L';', "$;$");
         SEQ(L'Ϳ', "$J$");
-        case 0x0380 ... 0x0383:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x0380, 0x0383);
         UNS_RANGE(L'΄', L'Ά');
         SEQ(L'·', "$\\textperiodcentered$");
         UNS_RANGE(L'Έ', L'Ί');
-        case 0x038b:               return UTF8TOTEX_INVALID;
+        INV(0x038b);
         UNS(L'Ό');
-        case 0x038d:               return UTF8TOTEX_INVALID;
+        INV(0x038d);
         UNS_RANGE(L'Ύ', L'ΐ');
         SEQ(L'Α', "$A$");
         SEQ(L'Β', "$B$");
@@ -481,7 +491,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'Ο', "$O$");
         SEQ(L'Π', "$\\Pi$");
         SEQ(L'Ρ', "$P$");
-        case 0x03a2:               return UTF8TOTEX_INVALID;
+        INV(0x03a2);
         SEQ(L'Σ', "$\\Sigma$");
         SEQ(L'Τ', "$T$");
         SEQ(L'Υ', "$Y$");
@@ -718,12 +728,12 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         /* Greek extended */
         SEQ(L'Ῐ', "{\\u I}");
         SEQ(L'Ῑ', "{\\=I}");
-        case 0x1fdc:               return UTF8TOTEX_INVALID;
+        INV(0x1fdc);
         SEQ(L'Ῠ', "{\\u Y}");
         SEQ(L'Ῡ', "{\\=Y}");
-        case 0x1ff0 ... 0x1ff1:    return UTF8TOTEX_INVALID;
-        case 0x1ff5:               return UTF8TOTEX_INVALID;
-        case 0x1fff:               return UTF8TOTEX_INVALID;
+        INV_RANGE(0x1ff0, 0x1ff1);
+        INV(0x1ff5);
+        INV(0x1fff);
 
         /* Letterlike symbols */
         SEQ_TC(L'℃', "{\\textdegree}C");
@@ -757,7 +767,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         /* XXX */
         SEQ(L'⁰', "\\textsuperscript{0}");
         SEQ(L'ⁱ', "\\textsuperscript{i}");
-        case 0x2072 ... 0x2073:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x2072, 0x2073);
         SEQ(L'⁴', "\\textsuperscript{4}");
         SEQ(L'⁵', "\\textsuperscript{5}");
         SEQ(L'⁶', "\\textsuperscript{6}");
@@ -785,7 +795,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'₌', "\\textsubscript{=}");
         SEQ(L'₍', "\\textsubscript{(}");
         SEQ(L'₎', "\\textsubscript{)}");
-        case 0x208f:               return UTF8TOTEX_INVALID;
+        INV(0x208f);
         SEQ(L'ₐ', "\\textsubscript{a}");
         SEQ(L'ₑ', "\\textsubscript{e}");
         SEQ(L'ₒ', "\\textsubscript{o}");
@@ -799,9 +809,9 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ₚ', "\\textsubscript{p}");
         SEQ(L'ₛ', "\\textsubscript{s}");
         SEQ(L'ₜ', "\\textsubscript{t}");
-        case 0x209d ... 0x209f:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x209d, 0x209f);
 
-        case 0x20bf ... 0x20cf:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x20bf, 0x20cf);
 
         /* Number forms */
         SEQ(L'Ⅰ', "I");
@@ -837,7 +847,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ⅾ', "d");
         SEQ(L'ⅿ', "m");
 
-        case 0x218c ... 0x218f:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0x218c, 0x218f);
 
         /* Mathematical operatos */
         SEQ(L'∆', "$\\bigtriangleup$");
@@ -1036,10 +1046,10 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'㏝', "Wb");
 
         /* Private use area */
-        case 0xe000 ... 0xf8ff:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xe000, 0xf8ff);
 
         /* CJK compatibility ideographs */
-        case 0xfada ... 0xfaff:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xfada, 0xfaff);
 
         SEQ(L'ﬀ', "ff");
         SEQ(L'ﬁ', "fi");
@@ -1048,13 +1058,13 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ﬄ', "ffl");
         UNS(L'ﬅ');
         SEQ(L'ﬆ', "st");
-        case 0xfb07 ... 0xfb12:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xfb07, 0xfb12);
 
         /* Small font variants */
-        case 0xfe6c ... 0xfe6f:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xfe6c, 0xfe6f);
 
         /* Halfwidth and fullwidth forms */
-        case 0xff00:               return UTF8TOTEX_INVALID;
+        INV(0xff00);
         SEQ(L'！', "!");
         SEQ(L'＂', "\"");
         SEQ(L'＃', "{\\#}");
@@ -1151,30 +1161,30 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'～', "{\\lettertilde}");
         SEQ(L'｟', "((");
         SEQ(L'｠', "))");
-        case 0xffc0 ... 0xffc1:    return UTF8TOTEX_INVALID;
-        case 0xffc8 ... 0xffc9:    return UTF8TOTEX_INVALID;
-        case 0xffd0 ... 0xffd1:    return UTF8TOTEX_INVALID;
-        case 0xffd8 ... 0xffd9:    return UTF8TOTEX_INVALID;
-        case 0xffdd ... 0xffdf:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xffc0, 0xffc1);
+        INV_RANGE(0xffc8, 0xffc9);
+        INV_RANGE(0xffd0, 0xffd1);
+        INV_RANGE(0xffd8, 0xffd9);
+        INV_RANGE(0xffdd, 0xffdf);
         SEQ(L'￠', "{\\textcent}");
         SEQ(L'￡', "{\\pounds}");
         SEQ_TC(L'￢', "{\\textlnot}");
         SEQ(L'￣', "{\\= }");
 
-        case 0xffe7:               return UTF8TOTEX_INVALID;
+        INV(0xffe7);
 
-        case 0xffef ... 0xfff8:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xffef, 0xfff8);
 
-        case 0xfffc:               return UTF8TOTEX_INVALID;
+        INV(0xfffc);
 
         /* They actually created two characters called "Not a character." We
          * have reached full inception.
          */
-        case 0xfffe ... 0xffff:    return UTF8TOTEX_INVALID;
+        INV_RANGE(0xfffe, 0xffff);
 
-        case 0x1000c:              return UTF8TOTEX_INVALID;
+        INV(0x1000c);
 
-        case 0x10027:              return UTF8TOTEX_INVALID;
+        INV(0x10027);
 
         /* UTF-8 characters are a maximum of 21 bits */
         case 1 << 21 ... UINT32_MAX:
