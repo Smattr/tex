@@ -57,11 +57,11 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
                 return UTF8TOTEX_UNSUPPORTED; \
             } while (0)
 
-#define ACC(str) \
-    do { \
-        *(s) = (str); \
-        return UTF8TOTEX_MODIFIER; \
-    } while (0)
+#define ACC(x, str) \
+    case x: do { \
+                *(s) = (str); \
+                return UTF8TOTEX_MODIFIER; \
+            } while (0)
 
         /* Basic Latin */
         case 0x0000 ... 0x0008:    return UTF8TOTEX_INVALID;
@@ -413,35 +413,35 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ʪ', "{\\small ls}");
         SEQ(L'ʫ', "{\\small lz}");
 
-        case L'ˆ':                 ACC("{\\^");
-        case L'ˇ':                 ACC("{\\v ");
+        ACC(L'ˆ', "{\\^");
+        ACC(L'ˇ', "{\\v ");
 
-        case L'ˉ':                 ACC("{\\=");
-        case L'ˊ':                 ACC("{\\'");
-        case L'ˋ':                 ACC("{\\`");
+        ACC(L'ˉ', "{\\=");
+        ACC(L'ˊ', "{\\'");
+        ACC(L'ˋ', "{\\`");
 
-        case L'ˍ':                 ACC("{\\b ");
+        ACC(L'ˍ', "{\\b ");
 
 
-        case 0x0300:               ACC("{\\`");
-        case 0x0301:               ACC("{\\'");
-        case 0x0302:               ACC("{\\^");
-        case 0x0303:               ACC("{\\~");
-        case 0x0304:               ACC("{\\=");
+        ACC(0x0300, "{\\`");
+        ACC(0x0301, "{\\'");
+        ACC(0x0302, "{\\^");
+        ACC(0x0303, "{\\~");
+        ACC(0x0304, "{\\=");
         case 0x0305:               return UTF8TOTEX_UNSUPPORTED;
-        case 0x0306:               ACC("{\\u ");
-        case 0x0307:               ACC("{\\.");
-        case 0x0308:               ACC("{\\\"");
+        ACC(0x0306, "{\\u ");
+        ACC(0x0307, "{\\.");
+        ACC(0x0308, "{\\\"");
         case 0x0309:               return UTF8TOTEX_UNSUPPORTED;
-        case 0x030a:               ACC("{\\r ");
-        case 0x030b:               ACC("{\\H ");
-        case 0x030c:               ACC("{\\v ");
+        ACC(0x030a, "{\\r ");
+        ACC(0x030b, "{\\H ");
+        ACC(0x030c, "{\\v ");
         /* XXX */
-        case 0x0327:               ACC("{\\c ");
+        ACC(0x0327, "{\\c ");
         /* XXX */
-        case 0x0331:               ACC("{\\b ");
+        ACC(0x0331, "{\\b ");
         /* XXX */
-        case 0x0361:               ACC("{\\t ");
+        ACC(0x0361, "{\\t ");
 
         /* Greek */
         SEQ(L';', "$;$");
