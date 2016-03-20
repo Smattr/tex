@@ -35,18 +35,18 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
                 return UTF8TOTEX_SEQUENCE; \
             } while (0)
 
-#define SEQ_T1(str) \
-    do { \
-        if (env.font_encoding == UTF8TOTEX_FE_T1 || \
-            env.font_encoding == UTF8TOTEX_FE_T2A || \
-            env.font_encoding == UTF8TOTEX_FE_T2B || \
-            env.font_encoding == UTF8TOTEX_FE_T2C || \
-            env.font_encoding == UTF8TOTEX_FE_X2) { \
-            *(s) = (str); \
-            return UTF8TOTEX_SEQUENCE; \
-        } \
-        return UTF8TOTEX_UNSUPPORTED; \
-    } while (0)
+#define SEQ_T1(c, str) \
+    case c: do { \
+                if (env.font_encoding == UTF8TOTEX_FE_T1 || \
+                    env.font_encoding == UTF8TOTEX_FE_T2A || \
+                    env.font_encoding == UTF8TOTEX_FE_T2B || \
+                    env.font_encoding == UTF8TOTEX_FE_T2C || \
+                    env.font_encoding == UTF8TOTEX_FE_X2) { \
+                    *(s) = (str); \
+                    return UTF8TOTEX_SEQUENCE; \
+                } \
+                return UTF8TOTEX_UNSUPPORTED; \
+            } while (0)
 
 #define SEQ_TC(str) \
     do { \
@@ -105,7 +105,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         case L'¨':                 SEQ_TC("{\\textasciidieresis}");
         SEQ(L'©', "{\\copyright}");
         SEQ(L'ª', "{\\textordfeminine}");
-        case L'«':                 SEQ_T1("{\\guillemotleft}");
+        SEQ_T1(L'«', "{\\guillemotleft}");
         case L'¬':                 SEQ_TC("{\\textlnot}");
         SEQ(0x00ad, "\\-"); /* soft hyphen */
         SEQ(L'®', "{\\textregistered}");
@@ -121,7 +121,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'¸', "{\\c }");
         SEQ(L'¹', "\\textsuperscript{1}");
         SEQ(L'º', "{\\textordmasculine}");
-        case L'»':                 SEQ_T1("{\\guillemotright}");
+        SEQ_T1(L'»', "{\\guillemotright}");
         case L'¼':                 SEQ_TC("{\\textonequarter}");
         case L'½':                 SEQ_TC("{\\textonehalf}");
         case L'¾':                 SEQ_TC("{\\textthreequarters}");
@@ -142,7 +142,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'Í', "{\\'I}");
         SEQ(L'Î', "{\\^I}");
         SEQ(L'Ï', "{\\\"I}");
-        case L'Ð':                 SEQ_T1("{\\DJ}");
+        SEQ_T1(L'Ð', "{\\DJ}");
         SEQ(L'Ñ', "{\\~N}");
         SEQ(L'Ò', "{\\`O}");
         SEQ(L'Ó', "{\\'O}");
@@ -156,7 +156,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'Û', "{\\^U}");
         SEQ(L'Ü', "{\\\"U}");
         SEQ(L'Ý', "{\\'Y}");
-        case L'Þ':                 SEQ_T1("{\\TH}");
+        SEQ_T1(L'Þ', "{\\TH}");
         SEQ(L'ß', "{\\ss}");
         SEQ(L'à', "{\\`a}");
         SEQ(L'á', "{\\'a}");
@@ -188,7 +188,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'û', "{\\^u}");
         SEQ(L'ü', "{\\\"u}");
         SEQ(L'ý', "{\\'y}");
-        case L'þ':                 SEQ_T1("{\\th}");
+        SEQ_T1(L'þ', "{\\th}");
         SEQ(L'ÿ', "{\\\"y}");
 
         /* Latin Extended-A */
@@ -196,8 +196,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ā', "{\\=a}");
         SEQ(L'Ă', "{\\u A}");
         SEQ(L'ă', "{\\u a}");
-        case L'Ą':                 SEQ_T1("{\\k A}");
-        case L'ą':                 SEQ_T1("{\\k a}");
+        SEQ_T1(L'Ą', "{\\k A}");
+        SEQ_T1(L'ą', "{\\k a}");
         SEQ(L'Ć', "{\\'C}");
         SEQ(L'ć', "{\\'c}");
         SEQ(L'Ĉ', "{\\^C}");
@@ -208,16 +208,16 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'č', "{\\v c}");
         SEQ(L'Ď', "{\\v D}");
         SEQ(L'ď', "{\\v d}");
-        case L'Đ':                 SEQ_T1("{\\DJ}");
-        case L'đ':                 SEQ_T1("{\\dj}");
+        SEQ_T1(L'Đ', "{\\DJ}");
+        SEQ_T1(L'đ', "{\\dj}");
         SEQ(L'Ē', "{\\=E}");
         SEQ(L'ē', "{\\=e}");
         SEQ(L'Ĕ', "{\\u E}");
         SEQ(L'ĕ', "{\\u e}");
         SEQ(L'Ė', "{\\.E}");
         SEQ(L'ė', "{\\.e}");
-        case L'Ę':                 SEQ_T1("{\\k E}");
-        case L'ę':                 SEQ_T1("{\\k e}");
+        SEQ_T1(L'Ę', "{\\k E}");
+        SEQ_T1(L'ę', "{\\k e}");
         SEQ(L'Ě', "{\\v E}");
         SEQ(L'ě', "{\\v e}");
         SEQ(L'Ĝ', "{\\^G}");
@@ -238,8 +238,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ī', "{\\=\\i}");
         SEQ(L'Ĭ', "{\\u I}");
         SEQ(L'ĭ', "{\\u\\i}");
-        case L'Į':                 SEQ_T1("{\\k I}");
-        case L'į':                 SEQ_T1("{\\k i}");
+        SEQ_T1(L'Į', "{\\k I}");
+        SEQ_T1(L'į', "{\\k i}");
         SEQ(L'İ', "{\\.I}");
         SEQ(L'ı', "{\\i}");
         SEQ(L'Ĳ', "IJ"); /* no native ligatures it seems */
@@ -266,8 +266,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'Ň', "{\\v N}");
         SEQ(L'ň', "{\\v n}");
         case L'ŉ':                 return UTF8TOTEX_UNSUPPORTED;
-        case L'Ŋ':                 SEQ_T1("{\\NG}");
-        case L'ŋ':                 SEQ_T1("{\\ng}");
+        SEQ_T1(L'Ŋ', "{\\NG}");
+        SEQ_T1(L'ŋ', "{\\ng}");
         SEQ(L'Ō', "{\\=O}");
         SEQ(L'ō', "{\\=o}");
         SEQ(L'Ŏ', "{\\u O}");
@@ -306,8 +306,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ů', "{\\r u}");
         SEQ(L'Ű', "{\\H U}");
         SEQ(L'ű', "{\\H u}");
-        case L'Ų':                 SEQ_T1("{\\k U}");
-        case L'ų':                 SEQ_T1("{\\k u}");
+        SEQ_T1(L'Ų', "{\\k U}");
+        SEQ_T1(L'ų', "{\\k u}");
         SEQ(L'Ŵ', "{\\^W}");
         SEQ(L'ŵ', "{\\^w}");
         SEQ(L'Ŷ', "{\\^Y}");
@@ -352,10 +352,10 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ǧ', "{\\v g}");
         SEQ(L'Ǩ', "{\\v K}");
         SEQ(L'ǩ', "{\\v k}");
-        case L'Ǫ':                 SEQ_T1("{\\k O}");
-        case L'ǫ':                 SEQ_T1("{\\k o}");
-        case L'Ǭ':                 SEQ_T1("{\\k{\\=O}}");
-        case L'ǭ':                 SEQ_T1("{\\k{\\=o}}");
+        SEQ_T1(L'Ǫ', "{\\k O}");
+        SEQ_T1(L'ǫ', "{\\k o}");
+        SEQ_T1(L'Ǭ', "{\\k{\\=O}}");
+        SEQ_T1(L'ǭ', "{\\k{\\=o}}");
         case L'Ǯ':
         case L'ǯ':                 return UTF8TOTEX_UNSUPPORTED;
         SEQ(L'ǰ', "{\\v\\j}");
@@ -737,8 +737,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'‧', "{\\textperiodcentered}");
         SEQ(L'‰', "{\\textperthousand}");
         SEQ(L'‱', "{\\textpertenthousand}");
-        case L'‹':                 SEQ_T1("{\\guilsinglleft}");
-        case L'›':                 SEQ_T1("{\\guilsinglright}");
+        SEQ_T1(L'‹', "{\\guilsinglleft}");
+        SEQ_T1(L'›', "{\\guilsinglright}");
         SEQ(L'⁀', "{\\t  }");
         SEQ(L'⁇', "??");
         SEQ(L'⁈', "?!");
