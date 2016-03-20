@@ -29,14 +29,14 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 
     switch (c) {
 
-#define SEQ(c, str) \
-    case c: do { \
+#define SEQ(x, str) \
+    case x: do { \
                 *(s) = (str); \
                 return UTF8TOTEX_SEQUENCE; \
             } while (0)
 
-#define SEQ_T1(c, str) \
-    case c: do { \
+#define SEQ_T1(x, str) \
+    case x: do { \
                 if (env.font_encoding == UTF8TOTEX_FE_T1 || \
                     env.font_encoding == UTF8TOTEX_FE_T2A || \
                     env.font_encoding == UTF8TOTEX_FE_T2B || \
