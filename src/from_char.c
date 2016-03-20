@@ -1197,6 +1197,10 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 #undef SEQ_T1
 #undef SEQ_TC
 #undef ACC
+#undef UNS
+#undef UNS_RANGE
+#undef INV
+#undef INV_RANGE
 
     }
 }
