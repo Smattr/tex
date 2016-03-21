@@ -14,14 +14,14 @@ int main(int argc, char **argv) {
     FILE *out = NULL;
 
     int _fuzzy = 0;
-    int _encoding = 0;
+    int _encoding = UTF8TOTEX_FE_OT1;
     int _textcomp = 0;
     while (true) {
         struct option options[] = {
             {"input", required_argument, 0, 'i'},
             {"output", required_argument, 0, 'o'},
-            {"ot1", no_argument, &_encoding, 0},
-            {"t1", no_argument, &_encoding, 1},
+            {"ot1", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT1},
+            {"t1", no_argument, &_encoding, (int)UTF8TOTEX_FE_T1},
             {"textcomp", no_argument, &_textcomp, 1},
             {"fuzzy", no_argument, &_fuzzy, 1},
             {"no-fuzzy", no_argument, &_fuzzy, 0},
@@ -78,8 +78,7 @@ int main(int argc, char **argv) {
     }
 
     utf8totex_environment_t env = UTF8TOTEX_DEFAULT_ENVIRONMENT;
-    if (_encoding)
-        env.font_encoding = UTF8TOTEX_FE_T1;
+    env.font_encoding = _encoding;
     if (_textcomp)
         env.textcomp = true;
     bool fuzzy = !!_fuzzy;
