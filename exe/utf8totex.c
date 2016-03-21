@@ -21,7 +21,23 @@ int main(int argc, char **argv) {
             {"input", required_argument, 0, 'i'},
             {"output", required_argument, 0, 'o'},
             {"ot1", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT1},
+            {"ot2", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT2},
+            {"ot3", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT3},
+            {"ot4", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT4},
+            {"ot6", no_argument, &_encoding, (int)UTF8TOTEX_FE_OT6},
             {"t1", no_argument, &_encoding, (int)UTF8TOTEX_FE_T1},
+            {"t2a", no_argument, &_encoding, (int)UTF8TOTEX_FE_T2A},
+            {"t2b", no_argument, &_encoding, (int)UTF8TOTEX_FE_T2B},
+            {"t2c", no_argument, &_encoding, (int)UTF8TOTEX_FE_T2C},
+            {"t3", no_argument, &_encoding, (int)UTF8TOTEX_FE_T3},
+            {"t4", no_argument, &_encoding, (int)UTF8TOTEX_FE_T4},
+            {"t5", no_argument, &_encoding, (int)UTF8TOTEX_FE_T5},
+            {"ts1", no_argument, &_encoding, (int)UTF8TOTEX_FE_TS1},
+            {"ts3", no_argument, &_encoding, (int)UTF8TOTEX_FE_TS3},
+            {"x2", no_argument, &_encoding, (int)UTF8TOTEX_FE_X2},
+            {"oml", no_argument, &_encoding, (int)UTF8TOTEX_FE_OML},
+            {"oms", no_argument, &_encoding, (int)UTF8TOTEX_FE_OMS},
+            {"omx", no_argument, &_encoding, (int)UTF8TOTEX_FE_OMX},
             {"textcomp", no_argument, &_textcomp, 1},
             {"fuzzy", no_argument, &_fuzzy, 1},
             {"no-fuzzy", no_argument, &_fuzzy, 0},
@@ -66,10 +82,27 @@ int main(int argc, char **argv) {
                                 " --output FILE\n"
                                 " -o FILE         Write to FILE instead of stdout\n"
                                 " --textcomp      Assume \\usepackage{textcomp}\n"
-                                " --t1            Assume font encoding T1\n"
-                                " --ot1           Assume font encoding OT1\n"
                                 " --fuzzy         Enable fuzzy mode\n"
-                                " --no-fuzzy      Disable fuzzy mode\n", argv[0]);
+                                " --no-fuzzy      Disable fuzzy mode\n"
+                                " --ot1\n"
+                                " --ot2\n"
+                                " --ot3\n"
+                                " --ot4\n"
+                                " --ot6\n"
+                                " --t1\n"
+                                " --t2a\n"
+                                " --t2b\n"
+                                " --t2c\n"
+                                " --t3\n"
+                                " --t4\n"
+                                " --t5\n"
+                                " --ts1\n"
+                                " --ts3\n"
+                                " --x2\n"
+                                " --oml\n"
+                                " --oms\n"
+                                " --omx           Assume a particular font encoding\n"
+                                , argv[0]);
                 return EXIT_FAILURE;
 
             default:
