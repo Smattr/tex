@@ -366,7 +366,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         UNS_RANGE(L'Ǖ', L'ǡ');
         SEQ(L'Ǣ', "{\\=\\AE}");
         SEQ(L'ǣ', "{\\=\\ae}");
-        case L'Ǥ':
+        UNS(L'Ǥ');
         UNS(L'ǥ');
         SEQ(L'Ǧ', "{\\v G}");
         SEQ(L'ǧ', "{\\v g}");
@@ -376,7 +376,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ_T1(L'ǫ', "{\\k o}");
         SEQ_T1(L'Ǭ', "{\\k{\\=O}}");
         SEQ_T1(L'ǭ', "{\\k{\\=o}}");
-        case L'Ǯ':
+        UNS(L'Ǯ');
         UNS(L'ǯ');
         SEQ(L'ǰ', "{\\v\\j}");
         SEQ(L'Ǳ', "DZ");
@@ -384,11 +384,11 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ǳ', "dz");
         SEQ(L'Ǵ', "{\\'G}");
         SEQ(L'ǵ', "{\\'g}");
-        case L'Ƕ':
+        UNS(L'Ƕ');
         UNS(L'Ƿ');
         SEQ(L'Ǹ', "{\\`N}");
         SEQ(L'ǹ', "{\\`n}");
-        case L'Ǻ':
+        UNS(L'Ǻ');
         UNS(L'ǻ');
         SEQ(L'Ǽ', "{\\'\\AE}");
         SEQ(L'ǽ', "{\\'\\ae}");
@@ -405,7 +405,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         UNS_RANGE(L'Ȫ', L'ȭ');
         SEQ(L'Ȯ', "{\\.O}");
         SEQ(L'ȯ', "{\\.o}");
-        case L'Ȱ':
+        UNS(L'Ȱ');
         UNS(L'ȱ');
         SEQ(L'Ȳ', "{\\=Y}");
         SEQ(L'ȳ', "{\\=y}");
@@ -582,7 +582,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
 
 
         /* Latin extended additional */
-        case L'Ḁ':
+        UNS(L'Ḁ');
         UNS(L'ḁ');
         SEQ(L'Ḃ', "{\\.B}");
         SEQ(L'ḃ', "{\\.b}");
@@ -590,7 +590,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ḅ', "{\\d b}");
         SEQ(L'Ḇ', "{\\b B}");
         SEQ(L'ḇ', "{\\b b}");
-        case L'Ḉ':
+        UNS(L'Ḉ');
         UNS(L'ḉ');
         SEQ(L'Ḋ', "{\\.D}");
         SEQ(L'ḋ', "{\\.d}");
@@ -622,11 +622,11 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ḵ', "{\\b k}");
         SEQ(L'Ḷ', "{\\d L}");
         SEQ(L'ḷ', "{\\d l}");
-        case L'Ḹ':
+        UNS(L'Ḹ');
         UNS(L'ḹ');
         SEQ(L'Ḻ', "{\\b L}");
         SEQ(L'ḻ', "{\\b l}");
-        case L'Ḽ':
+        UNS(L'Ḽ');
         UNS(L'ḽ');
         SEQ(L'Ḿ', "{\\'M}");
         SEQ(L'ḿ', "{\\'m}");
@@ -649,8 +649,8 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         SEQ(L'ṙ', "{\\.r}");
         SEQ(L'Ṛ', "{\\d R}");
         SEQ(L'ṛ', "{\\d r}");
-        case L'Ṝ':
-        UNS(L'ṝ');
+        SEQ(L'Ṝ', "{\\d{\\=R}}");
+        SEQ(L'ṝ', "{\\d{\\=r}}");
         SEQ(L'Ṟ', "{\\b R}");
         SEQ(L'ṟ', "{\\b r}");
         SEQ(L'Ṡ', "{\\.S}");
@@ -702,7 +702,7 @@ utf8totex_char_t utf8totex_from_char(const char **s, uint32_t c,
         UNS_RANGE(L'Ả', L'ặ');
         SEQ(L'Ẹ', "{\\d E}");
         SEQ(L'ẹ', "{\\d e}");
-        case L'Ẻ':
+        UNS(L'Ẻ');
         UNS(L'ẻ');
         SEQ(L'Ẽ', "{\\~E}");
         SEQ(L'ẽ', "{\\~e}");
